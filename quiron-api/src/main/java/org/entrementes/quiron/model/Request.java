@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name="request", namespace="org.entrmentes.exu")
+@XmlRootElement(name="request", namespace="org.entrmentes.quiron")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Request {
 	

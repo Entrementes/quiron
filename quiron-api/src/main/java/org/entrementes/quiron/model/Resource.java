@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name="api", namespace="org.entrmentes.exu")
+@XmlRootElement(name="api", namespace="org.entrmentes.quiron")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Resource {
 	

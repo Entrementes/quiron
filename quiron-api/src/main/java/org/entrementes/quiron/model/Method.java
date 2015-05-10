@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name="method", namespace="org.entrmentes.exu")
+@XmlRootElement(name="method", namespace="org.entrmentes.quiron")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Method {
 	
@@ -21,6 +21,10 @@ public class Method {
 	@XmlElementWrapper(name="responses", required=true)
 	@XmlElement(name="response", required=true)
 	private List<Response> responses;
+	
+	@XmlElementWrapper(name="dependencies", required=false)
+	@XmlElement(name="dependency", required=true)
+	private List<MethodDependency> dependencies;
 	
 	@XmlElement(name="type", required=true)
 	private String type;
@@ -47,6 +51,14 @@ public class Method {
 
 	public void setResponses(List<Response> responses) {
 		this.responses = responses;
+	}
+	
+	public List<MethodDependency> getDependencies() {
+		return dependencies;
+	}
+
+	public void setDependencies(List<MethodDependency> dependencies) {
+		this.dependencies = dependencies;
 	}
 
 	public String getType() {

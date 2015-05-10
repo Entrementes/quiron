@@ -1,16 +1,16 @@
 package org.entrementes.quiron.model;
 
-import java.util.List;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name="web-application-health", namespace="org.entrmentes.quiron")
+@XmlRootElement(name="method-dependency", namespace="org.entrmentes.quiron")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class WebApplicationHealth {
+public class MethodDependency {
+	
+	@XmlElement(name="id", required=true)
+	private String id;
 	
 	@XmlElement(name="host", required=true)
 	private String host;
@@ -21,11 +21,24 @@ public class WebApplicationHealth {
 	@XmlElement(name="context", required=false)
 	private String context;
 	
-	@XmlElementWrapper(name="apis", required=true)
-	@XmlElement(name="api")
-	private List<APIHealth> apis;
+	@XmlElement(name="version", required=false)
+	private String version;
 	
-	public WebApplicationHealth() {}
+	@XmlElement(name="path", required=true)
+	private String path;
+	
+	@XmlElement(name="type", required=true)
+	private String type;
+	
+	public MethodDependency() {}
+	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public String getHost() {
 		return host;
@@ -51,12 +64,28 @@ public class WebApplicationHealth {
 		this.context = context;
 	}
 
-	public List<APIHealth> getApis() {
-		return apis;
+	public String getVersion() {
+		return version;
 	}
 
-	public void setApis(List<APIHealth> apis) {
-		this.apis = apis;
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 }
