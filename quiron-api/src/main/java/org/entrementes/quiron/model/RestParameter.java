@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name="request", namespace="org.entrmentes.quiron")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Parameter {
+public class RestParameter {
 	
 	@XmlElement(name="name", required=false)
 	private String name;
@@ -21,7 +21,7 @@ public class Parameter {
 	@XmlElement(name="required", required=true, defaultValue="false")
 	private Boolean required;
 	
-	public Parameter() {}
+	public RestParameter() {}
 
 	public String getType() {
 		return type;
@@ -45,6 +45,14 @@ public class Parameter {
 
 	public void setRequired(Boolean required) {
 		this.required = required;
+	}
+
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }

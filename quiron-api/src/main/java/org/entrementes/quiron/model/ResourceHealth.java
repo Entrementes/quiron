@@ -17,7 +17,7 @@ public class ResourceHealth {
 	
 	@XmlElementWrapper(name="methods", required=true)
 	@XmlElement(name="method", required=true)
-	private List<MethodHealth> methods;
+	private List<RestMethodHealth> methods;
 	
 	public ResourceHealth() {}
 
@@ -29,11 +29,11 @@ public class ResourceHealth {
 		this.name = name;
 	}
 
-	public List<MethodHealth> getMethods() {
+	public List<RestMethodHealth> getMethods() {
 		return methods;
 	}
 
-	public void setMethods(List<MethodHealth> methods) {
+	public void setMethods(List<RestMethodHealth> methods) {
 		this.methods = methods;
 	}
 

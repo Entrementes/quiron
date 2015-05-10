@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name="method", namespace="org.entrmentes.quiron")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class MethodHealth {
+public class RestMethodHealth {
 	
 	@XmlElement(name="path", required=false)
 	private String path;

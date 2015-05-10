@@ -1,10 +1,10 @@
 package org.entrementes.quiron.component;
 
-import org.entrementes.quiron.model.MethodDependency;
+import org.entrementes.quiron.model.RestMethodDependency;
 
 public class UriBuilder {
 
-	public String getDependencyUri(MethodDependency dependency){
+	public String getDependencyUri(RestMethodDependency dependency){
 		return buildUri(dependency.getHost(), 
 				        dependency.getPort(), 
 				        dependency.getContext(), 

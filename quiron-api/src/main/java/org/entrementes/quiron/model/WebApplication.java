@@ -23,7 +23,7 @@ public class WebApplication {
 	
 	@XmlElementWrapper(name="apis", required=true)
 	@XmlElement(name="api")
-	private List<API> apis;
+	private List<RestAPI> apis;
 
 	public WebApplication() {}
 	
@@ -51,11 +51,11 @@ public class WebApplication {
 		this.context = context;
 	}
 
-	public List<API> getApis() {
+	public List<RestAPI> getApis() {
 		return apis;
 	}
 
-	public void setApis(List<API> apis) {
+	public void setApis(List<RestAPI> apis) {
 		this.apis = apis;
 	}
 

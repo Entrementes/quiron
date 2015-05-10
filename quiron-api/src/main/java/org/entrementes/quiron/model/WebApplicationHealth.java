@@ -23,7 +23,7 @@ public class WebApplicationHealth {
 	
 	@XmlElementWrapper(name="apis", required=true)
 	@XmlElement(name="api")
-	private List<APIHealth> apis;
+	private List<RestAPIHealth> apis;
 	
 	public WebApplicationHealth() {}
 
@@ -51,11 +51,11 @@ public class WebApplicationHealth {
 		this.context = context;
 	}
 
-	public List<APIHealth> getApis() {
+	public List<RestAPIHealth> getApis() {
 		return apis;
 	}
 
-	public void setApis(List<APIHealth> apis) {
+	public void setApis(List<RestAPIHealth> apis) {
 		this.apis = apis;
 	}
 

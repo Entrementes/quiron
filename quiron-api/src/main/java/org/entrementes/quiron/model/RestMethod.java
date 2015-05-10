@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name="method", namespace="org.entrmentes.quiron")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Method {
+public class RestMethod {
 	
 	@XmlElement(name="path", required=false)
 	private String path;
@@ -20,11 +20,11 @@ public class Method {
 	
 	@XmlElementWrapper(name="responses", required=true)
 	@XmlElement(name="response", required=true)
-	private List<Response> responses;
+	private List<RestResponse> responses;
 	
 	@XmlElementWrapper(name="dependencies", required=false)
 	@XmlElement(name="dependency", required=true)
-	private List<MethodDependency> dependencies;
+	private List<RestMethodDependency> dependencies;
 	
 	@XmlElement(name="type", required=true)
 	private String type;
@@ -45,19 +45,19 @@ public class Method {
 		this.path = path;
 	}
 
-	public List<Response> getResponses() {
+	public List<RestResponse> getResponses() {
 		return responses;
 	}
 
-	public void setResponses(List<Response> responses) {
+	public void setResponses(List<RestResponse> responses) {
 		this.responses = responses;
 	}
 	
-	public List<MethodDependency> getDependencies() {
+	public List<RestMethodDependency> getDependencies() {
 		return dependencies;
 	}
 
-	public void setDependencies(List<MethodDependency> dependencies) {
+	public void setDependencies(List<RestMethodDependency> dependencies) {
 		this.dependencies = dependencies;
 	}
 

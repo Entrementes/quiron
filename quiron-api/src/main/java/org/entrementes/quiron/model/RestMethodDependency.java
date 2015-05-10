@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name="method-dependency", namespace="org.entrmentes.quiron")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class MethodDependency {
+public class RestMethodDependency {
 	
 	@XmlElement(name="id", required=true)
 	private String id;
@@ -30,7 +30,7 @@ public class MethodDependency {
 	@XmlElement(name="type", required=true)
 	private String type;
 	
-	public MethodDependency() {}
+	public RestMethodDependency() {}
 	
 	public String getId() {
 		return id;

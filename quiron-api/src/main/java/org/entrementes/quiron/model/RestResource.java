@@ -10,16 +10,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name="api", namespace="org.entrmentes.quiron")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Resource {
+public class RestResource {
 	
 	@XmlElement(name="name", required=false)
 	private String name;
 	
 	@XmlElementWrapper(name="methods", required=true)
 	@XmlElement(name="method", required=true)
-	private List<Method> methods;
+	private List<RestMethod> methods;
 	
-	public Resource() {}
+	public RestResource() {}
 
 	public String getName() {
 		return name;
@@ -29,11 +29,11 @@ public class Resource {
 		this.name = name;
 	}
 
-	public List<Method> getMethods() {
+	public List<RestMethod> getMethods() {
 		return methods;
 	}
 
-	public void setMethods(List<Method> methods) {
+	public void setMethods(List<RestMethod> methods) {
 		this.methods = methods;
 	}
 

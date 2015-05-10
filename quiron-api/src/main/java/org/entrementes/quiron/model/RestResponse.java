@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name="response", namespace="org.entrmentes.quiron")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Response {
+public class RestResponse {
 	
 	@XmlElement(name="code", required=true)
 	private Integer code;
@@ -24,7 +24,7 @@ public class Response {
 	@XmlElementWrapper(name="assertion-test", required=false)
 	private Map<String, Object> assertionTest;
 	
-	public Response() {}
+	public RestResponse() {}
 
 	public Integer getCode() {
 		return code;

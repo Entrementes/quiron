@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name="api-health", namespace="org.entrmentes.quiron")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class APIHealth {
+public class RestAPIHealth {
 	
 	@XmlElement(name="version", required=false)
 	private String version;
@@ -19,7 +19,7 @@ public class APIHealth {
 	@XmlElement(name="resource")
 	private List<ResourceHealth> resources;
 
-	public APIHealth() {}
+	public RestAPIHealth() {}
 	
 	public String getVersion() {
 		return version;

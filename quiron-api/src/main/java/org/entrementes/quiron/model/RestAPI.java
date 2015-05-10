@@ -10,19 +10,19 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name="api", namespace="org.entrmentes.quiron")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class API {
+public class RestAPI {
 	
 	@XmlElement(name="version", required=false)
 	private String version;
 	
 	@XmlElementWrapper(name="resources", required=true)
 	@XmlElement(name="resource")
-	private List<Resource> resources;
+	private List<RestResource> resources;
 	
 	@XmlElement(name="deprecated",required=true, defaultValue="false")
 	private Boolean deprecated;
 	
-	public API() {}
+	public RestAPI() {}
 
 	public String getVersion() {
 		return version;
@@ -32,11 +32,11 @@ public class API {
 		this.version = version;
 	}
 
-	public List<Resource> getResources() {
+	public List<RestResource> getResources() {
 		return resources;
 	}
 
-	public void setResources(List<Resource> resources) {
+	public void setResources(List<RestResource> resources) {
 		this.resources = resources;
 	}
 

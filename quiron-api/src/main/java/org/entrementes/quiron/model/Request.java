@@ -12,15 +12,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Request {
 	
 	@XmlElementWrapper(name="parameters", required=false)
-	private Map<String, Parameter> parameters;
+	private Map<String, RestParameter> parameters;
 
 	public Request() {}
 	
-	public Map<String, Parameter> getParameters() {
+	public Map<String, RestParameter> getParameters() {
 		return parameters;
 	}
 
-	public void setParameters(Map<String, Parameter> parameters) {
+	public void setParameters(Map<String, RestParameter> parameters) {
 		this.parameters = parameters;
 	}
 
