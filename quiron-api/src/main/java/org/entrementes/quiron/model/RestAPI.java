@@ -15,6 +15,9 @@ public class RestAPI {
 	@XmlElement(name="version", required=false)
 	private String version;
 	
+	@XmlElement(name="id", required=true)
+	private String id;
+	
 	@XmlElementWrapper(name="resources", required=true)
 	@XmlElement(name="resource")
 	private List<RestResource> resources;
@@ -46,6 +49,14 @@ public class RestAPI {
 
 	public void setDeprecated(Boolean deprecated) {
 		this.deprecated = deprecated;
+	}
+
+	public String getId() {
+		return id;
+	}
+	
+	public void setId(String id) {
+		this.id = id;
 	}
 
 }

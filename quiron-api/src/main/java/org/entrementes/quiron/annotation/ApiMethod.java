@@ -9,8 +9,10 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface ApiMethod {
 	
-	String id();
+	public String id();
 	
 	public ApiDependency[] dependencies() default {};
+
+	public ApiResponse[] responses() default {};
 
 }

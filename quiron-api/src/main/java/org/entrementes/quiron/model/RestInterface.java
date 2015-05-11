@@ -1,11 +1,8 @@
 package org.entrementes.quiron.model;
 
-import java.util.List;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name="rest-interface")
@@ -21,9 +18,8 @@ public class RestInterface {
 	@XmlElement(name="context", required=false)
 	private String context;
 	
-	@XmlElementWrapper(name="apis", required=true)
-	@XmlElement(name="api")
-	private List<RestAPI> apis;
+	@XmlElement(name="api", required=true)
+	private RestAPI api;
 
 	public RestInterface() {}
 	
@@ -51,12 +47,12 @@ public class RestInterface {
 		this.context = context;
 	}
 
-	public List<RestAPI> getApis() {
-		return apis;
+	public RestAPI getApi() {
+		return api;
 	}
 
-	public void setApis(List<RestAPI> apis) {
-		this.apis = apis;
+	public void setApi(RestAPI api) {
+		this.api = api;
 	}
 
 }

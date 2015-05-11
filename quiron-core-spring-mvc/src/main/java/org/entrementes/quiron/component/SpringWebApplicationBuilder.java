@@ -1,7 +1,5 @@
 package org.entrementes.quiron.component;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.entrementes.quiron.model.RestAPI;
@@ -9,12 +7,12 @@ import org.entrementes.quiron.model.RestInterface;
 
 public class SpringWebApplicationBuilder {
 
-	private List<RestAPI> apis;
+	private RestAPI api;
 
 	private HttpServletRequest request;
 
-	public SpringWebApplicationBuilder apis(List<RestAPI> apis) {
-		this.apis = apis;
+	public SpringWebApplicationBuilder api(RestAPI api) {
+		this.api = api;
 		return this;
 	}
 
@@ -31,7 +29,7 @@ public class SpringWebApplicationBuilder {
 		builder.append(request.getScheme()).append("://")
 				.append(request.getServerName());
 		result.setHost(builder.toString());
-		result.setApis(this.apis);
+		result.setApi(this.api );
 		return result;
 	}
 

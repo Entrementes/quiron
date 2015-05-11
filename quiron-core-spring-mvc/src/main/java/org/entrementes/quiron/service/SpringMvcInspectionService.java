@@ -8,22 +8,22 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.entrementes.quiron.annotation.ApiMethod;
 import org.entrementes.quiron.annotation.ApiResource;
 import org.entrementes.quiron.component.SpringWebApplicationBuilder;
-import org.entrementes.quiron.model.RestRequest;
 import org.entrementes.quiron.model.RestAPI;
-import org.entrementes.quiron.model.RestMethod;
-import org.entrementes.quiron.model.RestParameter;
-import org.entrementes.quiron.model.RestResource;
 import org.entrementes.quiron.model.RestInterface;
 import org.entrementes.quiron.model.RestInterfaceHealth;
+import org.entrementes.quiron.model.RestMethod;
+import org.entrementes.quiron.model.RestParameter;
+import org.entrementes.quiron.model.RestRequest;
+import org.entrementes.quiron.model.RestResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,21 +37,21 @@ public class SpringMvcInspectionService implements InspectionServce {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SpringMvcInspectionService.class.getCanonicalName());
 	
-	private List<RestAPI> apis;
+	private RestAPI api;
 	
 	@Autowired
-	public SpringMvcInspectionService(ApplicationContext springContext, ServletContext servletContext) {
+	public SpringMvcInspectionService(ApplicationContext springContext,@Value("${api.version}") String version, @Value("${api.id}") String id) {
 		Map<String,Object> controllers = springContext.getBeansWithAnnotation(ApiResource.class);
 		LOGGER.debug("{} controllers found.", controllers.keySet().size());
 		List<RestResource> resources = new ArrayList<>();
-		RestAPI api = new RestAPI();
-		this.apis = new ArrayList<RestAPI>();
+		this.api = new RestAPI();
+		this.api.setVersion(version);
+		this.api.setId(id);
 		for(Entry<String,Object> controllerEntry : controllers.entrySet()){
 			RestResource mappedResource = extractResource(controllerEntry);
 			resources.add(mappedResource);
 		}
 		api.setResources(resources);
-		this.apis.add(api);
 	}
 
 	private RestResource extractResource(Entry<String, Object> controllerEntry) {
@@ -142,7 +142,7 @@ public class SpringMvcInspectionService implements InspectionServce {
 
 	@Override
 	public RestInterface getApi(HttpServletRequest request) {
-		return new SpringWebApplicationBuilder().apis(this.apis)
+		return new SpringWebApplicationBuilder().api(this.api)
 												.request(request)
 												.build();
 	}
