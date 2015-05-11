@@ -9,7 +9,6 @@ import java.util.Map.Entry;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.entrementes.model.builder.JavaTypeToXml;
 import org.entrementes.quiron.annotation.ApiDependency;
 import org.entrementes.quiron.annotation.ApiMethod;
 import org.entrementes.quiron.annotation.ApiResource;
@@ -20,6 +19,7 @@ import org.entrementes.quiron.model.RestMethodDependency;
 import org.entrementes.quiron.model.RestParameter;
 import org.entrementes.quiron.model.RestResource;
 import org.entrementes.quiron.model.RestResponse;
+import org.entrementes.quiron.model.builder.JavaTypeToXml;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;

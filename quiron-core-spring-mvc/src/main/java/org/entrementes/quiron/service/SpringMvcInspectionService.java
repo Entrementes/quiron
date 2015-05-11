@@ -6,14 +6,16 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.entrementes.model.builder.SpringWebApplicationBuilder;
 import org.entrementes.quiron.component.SpringAnnotationParser;
+import org.entrementes.quiron.exception.ExceptionCode;
+import org.entrementes.quiron.exception.QuironException;
 import org.entrementes.quiron.model.RestAPI;
 import org.entrementes.quiron.model.RestInterface;
 import org.entrementes.quiron.model.RestInterfaceHealth;
 import org.entrementes.quiron.model.RestMethod;
 import org.entrementes.quiron.model.RestMethodDependency;
 import org.entrementes.quiron.model.RestResource;
+import org.entrementes.quiron.model.builder.SpringWebApplicationBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +66,7 @@ public class SpringMvcInspectionService implements InspectionServce {
 			return query.get(0);
 		}
 		if (query.size() == 0) {
-			return new RestResource();
+			throw new QuironException(ExceptionCode.NOT_FOUND, "resource no found.");
 		}
 		LOGGER.warn("ambigous id configuration, found: {}", query.size());
 		return query.get(0);
@@ -79,7 +81,7 @@ public class SpringMvcInspectionService implements InspectionServce {
 			return query.get(0);
 		}
 		if (query.size() == 0) {
-			return new RestMethod();
+			throw new QuironException(ExceptionCode.NOT_FOUND, "method no found.");
 		}
 		LOGGER.warn("ambigous id configuration, found: {}", query.size());
 		return query.get(0);
@@ -94,7 +96,7 @@ public class SpringMvcInspectionService implements InspectionServce {
 			return query.get(0);
 		}
 		if (query.size() == 0) {
-			return new RestMethodDependency();
+			throw new QuironException(ExceptionCode.NOT_FOUND, "dependency no found.");
 		}
 		LOGGER.warn("ambigous id configuration, found: {}", query.size());
 		return query.get(0);

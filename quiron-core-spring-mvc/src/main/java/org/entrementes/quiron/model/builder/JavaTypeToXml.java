@@ -1,4 +1,4 @@
-package org.entrementes.model.builder;
+package org.entrementes.quiron.model.builder;
 
 import java.lang.reflect.Parameter;
 import java.math.BigDecimal;
