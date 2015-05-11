@@ -15,8 +15,9 @@ public class RestMethod {
 	@XmlElement(name = "path", required = false)
 	private String path;
 
-	@XmlElement(name = "request", required = false)
-	private RestRequest request;
+	@XmlElement(name="parameter", required=true)
+	@XmlElementWrapper(name="parameters", required=false)
+	private List<RestParameter> parameters;
 
 	@XmlElementWrapper(name = "responses", required = true)
 	@XmlElement(name = "response", required = true)
@@ -26,18 +27,18 @@ public class RestMethod {
 	@XmlElement(name = "dependency", required = true)
 	private List<RestMethodDependency> dependencies;
 
-	@XmlElement(name = "type", required = true)
-	private String type;
+	@XmlElement(name = "method-type", required = true)
+	private String methodType;
 
 	@XmlElement(name = "id", required = true)
 	private String id;
 
-	public RestRequest getRequest() {
-		return request;
+	public List<RestParameter> getParameters() {
+		return parameters;
 	}
 
-	public void setRequest(RestRequest request) {
-		this.request = request;
+	public void setParameters(List<RestParameter> parameters) {
+		this.parameters = parameters;
 	}
 
 	public String getPath() {
@@ -64,12 +65,12 @@ public class RestMethod {
 		this.dependencies = dependencies;
 	}
 
-	public String getType() {
-		return type;
+	public String getMethodType() {
+		return methodType;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setMethodType(String type) {
+		this.methodType = type;
 	}
 
 	public String getId() {

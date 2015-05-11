@@ -13,9 +13,8 @@ public class UriBuilderTest {
 		dependency.setHost("entrementes.org");
 		dependency.setPort(7777);
 		dependency.setContext("quiron");
-		dependency.setVersion("v1");
 		dependency.setPath("resources");
-		assertEquals(new UriBuilder().getDependencyUri(dependency),"http://entrementes.org:7777/quiron/v1/resources");
+		assertEquals(new UriBuilder().getDependencyUri(dependency),"http://entrementes.org:7777/quiron/resources");
 	}
 	
 	@Test
@@ -23,9 +22,8 @@ public class UriBuilderTest {
 		RestMethodDependency dependency = new RestMethodDependency();
 		dependency.setPort(7777);
 		dependency.setContext("quiron");
-		dependency.setVersion("v1");
 		dependency.setPath("resources");
-		assertEquals(new UriBuilder().getDependencyUri(dependency), "/quiron/v1/resources");
+		assertEquals(new UriBuilder().getDependencyUri(dependency), "/quiron/resources");
 	}
 	
 	@Test
@@ -33,9 +31,8 @@ public class UriBuilderTest {
 		RestMethodDependency dependency = new RestMethodDependency();
 		dependency.setHost("entrementes.org");
 		dependency.setContext("quiron");
-		dependency.setVersion("v1");
 		dependency.setPath("resources");
-		assertEquals(new UriBuilder().getDependencyUri(dependency),"http://entrementes.org/quiron/v1/resources");
+		assertEquals(new UriBuilder().getDependencyUri(dependency),"http://entrementes.org/quiron/resources");
 	}
 	
 	@Test
@@ -43,17 +40,8 @@ public class UriBuilderTest {
 		RestMethodDependency dependency = new RestMethodDependency();
 		dependency.setHost("entrementes.org");
 		dependency.setPort(7777);
-		dependency.setVersion("v1");
 		dependency.setPath("resources");
-		assertEquals(new UriBuilder().getDependencyUri(dependency),"http://entrementes.org:7777/v1/resources");
-	}
-	
-	@Test
-	public void must_build_version_dependency_path() {
-		RestMethodDependency dependency = new RestMethodDependency();
-		dependency.setVersion("v1");
-		dependency.setPath("resources");
-		assertEquals(new UriBuilder().getDependencyUri(dependency),"v1/resources");
+		assertEquals(new UriBuilder().getDependencyUri(dependency),"http://entrementes.org:7777/resources");
 	}
 	
 	@Test

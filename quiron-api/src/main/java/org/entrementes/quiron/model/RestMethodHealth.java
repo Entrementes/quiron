@@ -1,8 +1,11 @@
 package org.entrementes.quiron.model;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name="method-health")
@@ -12,8 +15,9 @@ public class RestMethodHealth {
 	@XmlElement(name="path", required=false)
 	private String path;
 	
-	@XmlElement(name="request", required=false)
-	private RestRequest request;
+	@XmlElement(name="parameter", required=true)
+	@XmlElementWrapper(name="parameters", required=false)
+	private List<RestParameter> parameters;
 	
 	@XmlElement(name="response", required=true)
 	private RestResponseHealth response;
@@ -27,14 +31,6 @@ public class RestMethodHealth {
 
 	public void setPath(String path) {
 		this.path = path;
-	}
-
-	public RestRequest getRequest() {
-		return request;
-	}
-
-	public void setRequest(RestRequest request) {
-		this.request = request;
 	}
 
 	public RestResponseHealth getResponse() {
@@ -51,6 +47,14 @@ public class RestMethodHealth {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public List<RestParameter> getParameters() {
+		return parameters;
+	}
+
+	public void setParameters(List<RestParameter> parameters) {
+		this.parameters = parameters;
 	}
 
 }

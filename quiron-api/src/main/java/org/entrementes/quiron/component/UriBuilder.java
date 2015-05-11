@@ -8,11 +8,10 @@ public class UriBuilder {
 		return buildUri(dependency.getHost(), 
 				        dependency.getPort(), 
 				        dependency.getContext(), 
-				        dependency.getVersion(), 
 				        dependency.getPath()) ;
 	}
 	
-	private String buildUri(String host, Integer port, String context, String version, String path){
+	private String buildUri(String host, Integer port, String context, String path){
 		StringBuilder builder = new StringBuilder();
 		if(host != null){
 			builder.append("http://");
@@ -30,10 +29,6 @@ public class UriBuilder {
 			if(builder.length() > 0){
 				builder.append("/");
 			}
-		}
-		if(version != null){
-			builder.append(version);
-			builder.append("/");
 		}
 		if(path != null){
 			builder.append(path);

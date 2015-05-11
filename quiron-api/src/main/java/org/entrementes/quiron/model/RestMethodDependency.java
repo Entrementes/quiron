@@ -21,14 +21,11 @@ public class RestMethodDependency {
 	@XmlElement(name="context", required=false)
 	private String context;
 	
-	@XmlElement(name="version", required=false)
-	private String version;
-	
 	@XmlElement(name="path", required=true)
 	private String path;
 	
-	@XmlElement(name="type", required=true)
-	private String type;
+	@XmlElement(name="method-type", required=true)
+	private String methodType;
 	
 	public RestMethodDependency() {}
 	
@@ -64,14 +61,6 @@ public class RestMethodDependency {
 		this.context = context;
 	}
 
-	public String getVersion() {
-		return version;
-	}
-
-	public void setVersion(String version) {
-		this.version = version;
-	}
-
 	public String getPath() {
 		return path;
 	}
@@ -80,12 +69,12 @@ public class RestMethodDependency {
 		this.path = path;
 	}
 
-	public String getType() {
-		return type;
+	public String getMethodType() {
+		return methodType;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setMethodType(String type) {
+		this.methodType = type;
 	}
 
 }

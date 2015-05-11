@@ -1,4 +1,4 @@
-package org.entrementes.quiron.component;
+package org.entrementes.model.builder;
 
 import javax.servlet.http.HttpServletRequest;
 

@@ -22,9 +22,6 @@ public class RestAPI {
 	@XmlElement(name="resource")
 	private List<RestResource> resources;
 	
-	@XmlElement(name="deprecated",required=true, defaultValue="false")
-	private Boolean deprecated;
-	
 	public RestAPI() {}
 
 	public String getVersion() {
@@ -41,14 +38,6 @@ public class RestAPI {
 
 	public void setResources(List<RestResource> resources) {
 		this.resources = resources;
-	}
-
-	public Boolean getDeprecated() {
-		return deprecated;
-	}
-
-	public void setDeprecated(Boolean deprecated) {
-		this.deprecated = deprecated;
 	}
 
 	public String getId() {

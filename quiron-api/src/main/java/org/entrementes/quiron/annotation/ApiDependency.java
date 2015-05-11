@@ -11,10 +11,8 @@ public @interface ApiDependency {
 	
 	public String context() default "";
 	
-	public String version() default "";
-	
 	public String path() default "";
-	
-	public String type() default "";
+
+	public String methodType() default "GET";
 
 }
