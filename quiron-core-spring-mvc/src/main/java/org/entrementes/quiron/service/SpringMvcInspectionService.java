@@ -13,13 +13,14 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.entrementes.quiron.annotation.ApiMethod;
 import org.entrementes.quiron.annotation.ApiResource;
-import org.entrementes.quiron.model.Request;
+import org.entrementes.quiron.component.SpringWebApplicationBuilder;
+import org.entrementes.quiron.model.RestRequest;
 import org.entrementes.quiron.model.RestAPI;
 import org.entrementes.quiron.model.RestMethod;
 import org.entrementes.quiron.model.RestParameter;
 import org.entrementes.quiron.model.RestResource;
-import org.entrementes.quiron.model.WebApplication;
-import org.entrementes.quiron.model.WebApplicationHealth;
+import org.entrementes.quiron.model.RestInterface;
+import org.entrementes.quiron.model.RestInterfaceHealth;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,37 +37,33 @@ public class SpringMvcInspectionService implements InspectionServce {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SpringMvcInspectionService.class.getCanonicalName());
 	
-	private WebApplication application;
+	private List<RestAPI> apis;
 	
 	@Autowired
-	public SpringMvcInspectionService(ApplicationContext springContext, ServletContext servlet) {
+	public SpringMvcInspectionService(ApplicationContext springContext, ServletContext servletContext) {
 		Map<String,Object> controllers = springContext.getBeansWithAnnotation(ApiResource.class);
 		LOGGER.debug("{} controllers found.", controllers.keySet().size());
-		this.application = new WebApplication();
-		this.application.setContext(servlet.getContextPath());
 		List<RestResource> resources = new ArrayList<>();
 		RestAPI api = new RestAPI();
-		List<RestAPI> apis = new ArrayList<RestAPI>();
+		this.apis = new ArrayList<RestAPI>();
 		for(Entry<String,Object> controllerEntry : controllers.entrySet()){
 			RestResource mappedResource = extractResource(controllerEntry);
 			resources.add(mappedResource);
 		}
 		api.setResources(resources);
-		apis.add(api);
-		this.application.setApis(apis);
+		this.apis.add(api);
 	}
 
 	private RestResource extractResource(Entry<String, Object> controllerEntry) {
 		ApiResource apiResource = controllerEntry.getValue().getClass().getAnnotation(ApiResource.class);
 		RequestMapping resourceMapping = controllerEntry.getValue().getClass().getAnnotation(RequestMapping.class);
 		RestResource result = new RestResource();
-		result.setName(controllerEntry.getKey());
 		String[] resourcesPath = resourceMapping.value(); 
 		Class<?> classe = controllerEntry.getValue().getClass();
 		Method[] methods = classe.getDeclaredMethods();
 		List<RestMethod> mappedMethods = extractMethods(methods, parsePath(resourcesPath));
 		result.setMethods(mappedMethods);
-		result.setName(apiResource.name());
+		result.setId(apiResource.id());
 		return result;
 	}
 
@@ -75,10 +72,12 @@ public class SpringMvcInspectionService implements InspectionServce {
 		for(Method method : methods){
 			if(method.isAnnotationPresent(ApiMethod.class)){
 				RestMethod mappedMethod = new RestMethod();
+				ApiMethod apiMethod = method.getAnnotation(ApiMethod.class);
+				mappedMethod.setId(apiMethod.id());
 				RequestMapping methodMapping = method.getAnnotation(RequestMapping.class);
 				String[] methodPath = methodMapping.value();
 				mappedMethod.setPath(resourcePath + parsePath(methodPath));
-				Request request = extractRequest(method);
+				RestRequest request = extractRequest(method);
 				mappedMethod.setType(parseMethodType(methodMapping.method()));
 				mappedMethod.setRequest(request);
 				result.add(mappedMethod);
@@ -101,9 +100,9 @@ public class SpringMvcInspectionService implements InspectionServce {
 		return methodPath[0];
 	}
 
-	private Request extractRequest(Method method) {
+	private RestRequest extractRequest(Method method) {
 		Parameter[] parameters = method.getParameters();
-		Request result = new Request();
+		RestRequest result = new RestRequest();
 		List<RestParameter> mappedParameters = extractParameters(parameters);
 		Map<String,RestParameter> map = mappedParameters.stream().collect(Collectors.toMap(param -> param.getName(), param -> param));
 		result.setParameters(map);
@@ -131,7 +130,7 @@ public class SpringMvcInspectionService implements InspectionServce {
 			if(parameter.isAnnotationPresent(RequestBody.class)){
 				mappedParam = new RestParameter();
 				mappedParam.setStyle("body");
-				mappedParam.setName(parameter.getName());
+				mappedParam.setName(null);
 				mappedParam.setRequired(true);
 			}
 			if(mappedParam != null){
@@ -142,12 +141,14 @@ public class SpringMvcInspectionService implements InspectionServce {
 	}
 
 	@Override
-	public WebApplication getApi(HttpServletRequest request) {
-		return this.application;
+	public RestInterface getApi(HttpServletRequest request) {
+		return new SpringWebApplicationBuilder().apis(this.apis)
+												.request(request)
+												.build();
 	}
 
 	@Override
-	public WebApplicationHealth getStatus() {
+	public RestInterfaceHealth getStatus() {
 		// TODO Auto-generated method stub
 		return null;
 	}

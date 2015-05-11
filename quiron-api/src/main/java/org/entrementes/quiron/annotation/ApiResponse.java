@@ -9,8 +9,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface ApiResponse {
 	
-	public static final String NULL = null;
-	
 	public int code();
 	
 	public String body() default "";

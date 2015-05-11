@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name="response", namespace="org.entrmentes.quiron")
+@XmlRootElement(name="response-health")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ResponseHealth {
+public class RestResponseHealth {
 	
 	@XmlElement(name="code", required=true)
 	private Integer code;
@@ -27,7 +27,7 @@ public class ResponseHealth {
 	@XmlElement(name="passed", required=false)
 	private Boolean passed;
 	
-	public ResponseHealth() {}
+	public RestResponseHealth() {}
 
 	public Integer getCode() {
 		return code;

@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name="method-dependency", namespace="org.entrmentes.quiron")
+@XmlRootElement(name="dependency")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RestMethodDependency {
 	

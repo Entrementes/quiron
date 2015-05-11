@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name="method", namespace="org.entrmentes.quiron")
+@XmlRootElement(name="method-health")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RestMethodHealth {
 	
@@ -13,10 +13,10 @@ public class RestMethodHealth {
 	private String path;
 	
 	@XmlElement(name="request", required=false)
-	private Request request;
+	private RestRequest request;
 	
 	@XmlElement(name="response", required=true)
-	private ResponseHealth response;
+	private RestResponseHealth response;
 	
 	@XmlElement(name="type", required=true)
 	private String type;
@@ -29,19 +29,19 @@ public class RestMethodHealth {
 		this.path = path;
 	}
 
-	public Request getRequest() {
+	public RestRequest getRequest() {
 		return request;
 	}
 
-	public void setRequest(Request request) {
+	public void setRequest(RestRequest request) {
 		this.request = request;
 	}
 
-	public ResponseHealth getResponse() {
+	public RestResponseHealth getResponse() {
 		return response;
 	}
 
-	public void setResponse(ResponseHealth response) {
+	public void setResponse(RestResponseHealth response) {
 		this.response = response;
 	}
 

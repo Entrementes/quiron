@@ -8,12 +8,12 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name="api", namespace="org.entrmentes.quiron")
+@XmlRootElement(name="resource")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RestResource {
 	
-	@XmlElement(name="name", required=false)
-	private String name;
+	@XmlElement(name="id", required=false)
+	private String id;
 	
 	@XmlElementWrapper(name="methods", required=true)
 	@XmlElement(name="method", required=true)
@@ -21,12 +21,12 @@ public class RestResource {
 	
 	public RestResource() {}
 
-	public String getName() {
-		return name;
+	public String getId() {
+		return id;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public List<RestMethod> getMethods() {

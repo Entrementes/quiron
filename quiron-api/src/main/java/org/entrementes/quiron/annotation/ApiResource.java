@@ -9,8 +9,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface ApiResource {
 
-	String version() default "";
-
-	String name();
+	String id();
 
 }

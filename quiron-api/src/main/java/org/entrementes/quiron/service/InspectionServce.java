@@ -2,13 +2,13 @@ package org.entrementes.quiron.service;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.entrementes.quiron.model.WebApplication;
-import org.entrementes.quiron.model.WebApplicationHealth;
+import org.entrementes.quiron.model.RestInterface;
+import org.entrementes.quiron.model.RestInterfaceHealth;
 
 public interface InspectionServce {
 	
-	WebApplication getApi(HttpServletRequest request);
+	RestInterface getApi(HttpServletRequest request);
 	
-	WebApplicationHealth getStatus();
+	RestInterfaceHealth getStatus();
 
 }

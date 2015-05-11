@@ -17,7 +17,7 @@ public class RestAPIHealth {
 	
 	@XmlElementWrapper(name="resources")
 	@XmlElement(name="resource")
-	private List<ResourceHealth> resources;
+	private List<RestResourceHealth> resources;
 
 	public RestAPIHealth() {}
 	
@@ -29,4 +29,12 @@ public class RestAPIHealth {
 		this.version = version;
 	}
 
+	public List<RestResourceHealth> getResources() {
+		return resources;
+	}
+
+	public void setResources(List<RestResourceHealth> resources) {
+		this.resources = resources;
+	}
+	
 }

@@ -7,14 +7,14 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name="request", namespace="org.entrmentes.quiron")
+@XmlRootElement(name="request")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Request {
+public class RestRequest {
 	
 	@XmlElementWrapper(name="parameters", required=false)
 	private Map<String, RestParameter> parameters;
 
-	public Request() {}
+	public RestRequest() {}
 	
 	public Map<String, RestParameter> getParameters() {
 		return parameters;

@@ -8,35 +8,38 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name="method", namespace="org.entrmentes.quiron")
+@XmlRootElement(name = "method")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RestMethod {
-	
-	@XmlElement(name="path", required=false)
+
+	@XmlElement(name = "path", required = false)
 	private String path;
-	
-	@XmlElement(name="request", required=false)
-	private Request request;
-	
-	@XmlElementWrapper(name="responses", required=true)
-	@XmlElement(name="response", required=true)
+
+	@XmlElement(name = "request", required = false)
+	private RestRequest request;
+
+	@XmlElementWrapper(name = "responses", required = true)
+	@XmlElement(name = "response", required = true)
 	private List<RestResponse> responses;
-	
-	@XmlElementWrapper(name="dependencies", required=false)
-	@XmlElement(name="dependency", required=true)
+
+	@XmlElementWrapper(name = "dependencies", required = false)
+	@XmlElement(name = "dependency", required = true)
 	private List<RestMethodDependency> dependencies;
-	
-	@XmlElement(name="type", required=true)
+
+	@XmlElement(name = "type", required = true)
 	private String type;
 
-	public Request getRequest() {
+	@XmlElement(name = "id", required = true)
+	private String id;
+
+	public RestRequest getRequest() {
 		return request;
 	}
 
-	public void setRequest(Request request) {
+	public void setRequest(RestRequest request) {
 		this.request = request;
 	}
-	
+
 	public String getPath() {
 		return path;
 	}
@@ -52,7 +55,7 @@ public class RestMethod {
 	public void setResponses(List<RestResponse> responses) {
 		this.responses = responses;
 	}
-	
+
 	public List<RestMethodDependency> getDependencies() {
 		return dependencies;
 	}
@@ -68,5 +71,13 @@ public class RestMethod {
 	public void setType(String type) {
 		this.type = type;
 	}
-	
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
 }

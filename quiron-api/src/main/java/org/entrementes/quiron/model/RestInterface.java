@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name="web-application", namespace="org.entrmentes.quiron")
+@XmlRootElement(name="rest-interface")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class WebApplication {
+public class RestInterface {
 	
 	@XmlElement(name="host", required=true)
 	private String host;
@@ -25,7 +25,7 @@ public class WebApplication {
 	@XmlElement(name="api")
 	private List<RestAPI> apis;
 
-	public WebApplication() {}
+	public RestInterface() {}
 	
 	public String getHost() {
 		return host;

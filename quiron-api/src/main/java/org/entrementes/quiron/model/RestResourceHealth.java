@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name="resource-health", namespace="org.entrmentes.quiron")
+@XmlRootElement(name="resource-health")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ResourceHealth {
+public class RestResourceHealth {
 	
 	@XmlElement(name="name", required=false)
 	private String name;
@@ -19,7 +19,7 @@ public class ResourceHealth {
 	@XmlElement(name="method", required=true)
 	private List<RestMethodHealth> methods;
 	
-	public ResourceHealth() {}
+	public RestResourceHealth() {}
 
 	public String getName() {
 		return name;
