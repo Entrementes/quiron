@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.entrementes.quiron.annotation.ApiMethod;
 import org.entrementes.quiron.annotation.ApiResource;
+import org.entrementes.quiron.annotation.ApiResponse;
 import org.entrementes.quiron.component.SpringWebApplicationBuilder;
 import org.entrementes.quiron.model.RestAPI;
 import org.entrementes.quiron.model.RestInterface;
@@ -20,6 +21,7 @@ import org.entrementes.quiron.model.RestMethod;
 import org.entrementes.quiron.model.RestParameter;
 import org.entrementes.quiron.model.RestRequest;
 import org.entrementes.quiron.model.RestResource;
+import org.entrementes.quiron.model.RestResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,8 +82,23 @@ public class SpringMvcInspectionService implements InspectionServce {
 				RestRequest request = extractRequest(method);
 				mappedMethod.setType(parseMethodType(methodMapping.method()));
 				mappedMethod.setRequest(request);
+				List<RestResponse> mappedResponses = extractResponses(apiMethod);
+				mappedMethod.setResponses(mappedResponses);
 				result.add(mappedMethod);
 			}
+		}
+		return result;
+	}
+
+	private List<RestResponse> extractResponses(ApiMethod apiMethod) {
+		List<RestResponse> result = new ArrayList<RestResponse>();
+		ApiResponse[] responses = apiMethod.responses();
+		for(ApiResponse response : responses){
+			RestResponse mappedResponse = new RestResponse();
+			mappedResponse.setDescription(response.description());
+			mappedResponse.setCode(response.code());
+			mappedResponse.setBody(response.body());
+			result.add(mappedResponse);
 		}
 		return result;
 	}
