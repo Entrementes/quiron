@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.entrementes.quiron.annotation.ApiMethod;
+import org.entrementes.quiron.annotation.ApiRequestParam;
 import org.entrementes.quiron.annotation.ApiResource;
 import org.entrementes.quiron.annotation.ApiResponse;
+import org.entrementes.quiron.model.constants.QuironParamType;
 import org.entrementes.quiron.sample.boot.model.User;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,7 +34,7 @@ public class UserResources {
 	}
 	
 	@ApiMethod(id="create", responses={
-			@ApiResponse(code=CREATED, body="${create-response.json}", requestBody="${create-request.json}"),
+			@ApiResponse(code=CREATED, body="${create-response.json}", requestParams={@ApiRequestParam(value="${create-request.json}")}),
 			@ApiResponse(code=BAD_REQUEST, requestBody="${create-bad-request.json}")
 	})
 	@RequestMapping(value="/",method=RequestMethod.POST)
@@ -42,8 +44,8 @@ public class UserResources {
 	}
 	
 	@ApiMethod(id="read", responses={
-			@ApiResponse(code=OK, body="${read-response.json}", requestParams="{\"id\": 1}"),
-			@ApiResponse(code=NOT_FOUND, requestParams="{\"id\": 7}")	
+			@ApiResponse(code=OK, body="${read-response.json}", requestParams={@ApiRequestParam(name="id", type=QuironParamType.URI, value="1")}),
+			@ApiResponse(code=NOT_FOUND, requestParams={@ApiRequestParam(name="id", type=QuironParamType.URI, value="7")})	
 	})
 	@RequestMapping(value="/{id}",method=RequestMethod.GET)
 	@ResponseBody
@@ -52,8 +54,8 @@ public class UserResources {
 	}
 	
 	@ApiMethod(id="update", responses={
-			@ApiResponse(code=OK, body="${read-response.json}", requestBody="${update-request.json}", requestParams="{\"id\": 1}"),
-			@ApiResponse(code=NOT_FOUND, requestBody="${update-request.json}", requestParams="{\"id\": 7}"),
+			@ApiResponse(code=OK, body="${read-response.json}", requestBody="${update-request.json}", requestParams={@ApiRequestParam(name="id", type=QuironParamType.URI, value="1")}),
+			@ApiResponse(code=NOT_FOUND, requestBody="${update-request.json}", requestParams={@ApiRequestParam(name="id", type=QuironParamType.URI, value="7")}),
 			@ApiResponse(code=BAD_REQUEST, requestBody="${update-bad-request.json}")
 	})
 	@RequestMapping(value="/{id}",method=RequestMethod.PUT)
@@ -63,8 +65,8 @@ public class UserResources {
 	}
 	
 	@ApiMethod(id="delete", responses={
-			@ApiResponse(code=OK, body="${delete-response.json}", requestBody="{\"id\": 1}"),
-			@ApiResponse(code=NOT_FOUND, requestBody="{\"id\": 7}")	
+			@ApiResponse(code=OK, body="${delete-response.json}", requestParams={@ApiRequestParam(name="id", type=QuironParamType.URI, value="1")}),
+			@ApiResponse(code=NOT_FOUND, requestParams={@ApiRequestParam(name="id", type=QuironParamType.URI, value="7")})	
 	})
 	@RequestMapping(value="/{id}",method=RequestMethod.DELETE)
 	@ResponseBody
