@@ -2,10 +2,12 @@ package org.entrementes.quiron.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.entrementes.quiron.component.JsonCatalog;
 import org.entrementes.quiron.component.SpringAnnotationParser;
 import org.entrementes.quiron.component.SpringDrivenHealthTester;
 import org.entrementes.quiron.exception.ExceptionCode;
@@ -34,6 +36,8 @@ public class SpringMvcInspectionService implements InspectionServce {
 	private SpringAnnotationParser annotationParser;
 	
 	private SpringDrivenHealthTester healthTester;
+	
+	private JsonCatalog jsonCatalog;
 
 	private RestAPI api;
 
@@ -41,12 +45,14 @@ public class SpringMvcInspectionService implements InspectionServce {
 	public SpringMvcInspectionService(ApplicationContext springContext,
 								SpringAnnotationParser annotationParser,
 								SpringDrivenHealthTester healthTester,
+								JsonCatalog jsonCatalog,
 								@Value("${api.version}") String version,
 								@Value("${api.id}") String id) {
 		this.annotationParser = annotationParser;
 		LOGGER.debug("building API with annotation parsing strattegy.");
 		this.api = this.annotationParser.buildApi(springContext, id, version);
 		this.healthTester = healthTester;
+		this.jsonCatalog = jsonCatalog;
 	}
 
 	@Override
@@ -111,6 +117,12 @@ public class SpringMvcInspectionService implements InspectionServce {
 		}
 		LOGGER.warn("ambigous id configuration, found: {}", query.size());
 		return query.get(0);
+	}
+
+	@Override
+	public Map<String,RestMethodDependency> listApiDependencies() {
+		return this.jsonCatalog.listApiDependencies();
+	
 	}
 
 }

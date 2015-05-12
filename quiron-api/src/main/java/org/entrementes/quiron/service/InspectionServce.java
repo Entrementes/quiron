@@ -1,5 +1,8 @@
 package org.entrementes.quiron.service;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.entrementes.quiron.model.RestInterface;
@@ -20,4 +23,6 @@ public interface InspectionServce {
 	
 	RestMethodDependency getMethodDependency(String resourceId, String methodId, String dependencyId);
 
+	Map<String, RestMethodDependency> listApiDependencies();
+	
 }

@@ -34,8 +34,8 @@ public class UserResources {
 	}
 	
 	@ApiMethod(id="create", responses={
-			@ApiResponse(code=CREATED, body="${create-response.json}", requestParams={@ApiRequestParam(value="${create-request.json}")}),
-			@ApiResponse(code=BAD_REQUEST, requestBody="${create-bad-request.json}")
+			@ApiResponse(code=CREATED, body="${create-response.json}", requestParams={@ApiRequestParam(value="${create-request.json}", type = QuironParamType.BODY)}),
+			@ApiResponse(code=BAD_REQUEST, requestParams={@ApiRequestParam(value="${create-bad-request.json}", type = QuironParamType.BODY)})
 	})
 	@RequestMapping(value="/",method=RequestMethod.POST)
 	@ResponseBody
@@ -54,10 +54,16 @@ public class UserResources {
 	}
 	
 	@ApiMethod(id="update", responses={
-			@ApiResponse(code=OK, body="${read-response.json}", requestBody="${update-request.json}", requestParams={@ApiRequestParam(name="id", type=QuironParamType.URI, value="1")}),
-			@ApiResponse(code=NOT_FOUND, requestBody="${update-request.json}", requestParams={@ApiRequestParam(name="id", type=QuironParamType.URI, value="7")}),
-			@ApiResponse(code=BAD_REQUEST, requestBody="${update-bad-request.json}")
-	})
+			@ApiResponse(code=OK, body="${update-response.json}", requestParams={@ApiRequestParam(name="id", type=QuironParamType.URI, value="1"),
+																				@ApiRequestParam(value="${update-request.json}", type = QuironParamType.BODY)
+																			}),
+			@ApiResponse(code=NOT_FOUND, requestParams={@ApiRequestParam(name="id", type=QuironParamType.URI, value="7"),
+														@ApiRequestParam(value="${update-request.json}", type = QuironParamType.BODY)
+													}),
+			@ApiResponse(code=BAD_REQUEST, requestParams={ @ApiRequestParam(name="id", type=QuironParamType.URI, value="1"),
+															@ApiRequestParam(value="${update-bad-request.json}", type = QuironParamType.BODY)
+														})
+													})
 	@RequestMapping(value="/{id}",method=RequestMethod.PUT)
 	@ResponseBody
 	public User update(@PathVariable("id") String id, @RequestBody User updated) {
@@ -70,7 +76,7 @@ public class UserResources {
 	})
 	@RequestMapping(value="/{id}",method=RequestMethod.DELETE)
 	@ResponseBody
-	public User delete(@PathVariable("id") String id, @RequestBody User updated) {
+	public User delete(@PathVariable("id") String id) {
 		return new User();
 	}
 

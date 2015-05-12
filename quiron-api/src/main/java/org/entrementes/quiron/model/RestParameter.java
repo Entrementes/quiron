@@ -5,6 +5,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.entrementes.quiron.model.constants.QuironParamType;
+
 @XmlRootElement(name="request")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RestParameter {
@@ -15,8 +17,8 @@ public class RestParameter {
 	@XmlElement(name="type", required=true, defaultValue="string")
 	private String type;
 	
-	@XmlElement(name="style", required=true, defaultValue="query")
-	private String style;
+	@XmlElement(name="style", required=true, defaultValue="QUERY")
+	private QuironParamType style;
 	
 	@XmlElement(name="required", required=true, defaultValue="false")
 	private Boolean required;
@@ -31,12 +33,12 @@ public class RestParameter {
 		this.type = type;
 	}
 
-	public String getStyle() {
+	public QuironParamType getStyle() {
 		return style;
 	}
 
-	public void setStyle(String style) {
-		this.style = style;
+	public void setStyle(QuironParamType query) {
+		this.style = query;
 	}
 
 	public Boolean getRequired() {

@@ -16,8 +16,6 @@ public @interface ApiResponse {
 	public String body() default "";
 	
 	public String description() default "";
-	
-	public String requestBody() default "";
 
 	public ApiRequestParam[] requestParams() default {};
 

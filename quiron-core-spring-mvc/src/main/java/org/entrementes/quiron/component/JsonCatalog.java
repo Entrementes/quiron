@@ -4,30 +4,38 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.IOUtils;
-import org.entrementes.quiron.model.constants.QuironConstants;
+import org.entrementes.quiron.model.RestMethodDependency;
+import org.entrementes.quiron.model.constants.QuironELParser;
 import org.springframework.stereotype.Component;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
 @Component
-public class PayloadCatalog {
-
-	private static final Pattern EL_REGEX = Pattern.compile(QuironConstants.QUIRON_EL);
+public class JsonCatalog {
 	
 	private Map<String, String> externalPayloadReferences;
 	
+	private Map<String, RestMethodDependency> dependencies;
+	
 	private JsonParser parser;
 	
-	public PayloadCatalog() throws FileNotFoundException, IOException {
+	private QuironELParser quironParser;
+	
+	public JsonCatalog() throws FileNotFoundException, IOException {
 		this.externalPayloadReferences = new HashMap<String, String>();
 		
 		this.parser = new JsonParser();
+		
+		this.quironParser = new QuironELParser();
 		
 		ClassLoader classLoader = getClass().getClassLoader();
 		File catalogDirectory = new File(classLoader.getResource(".").getFile());
@@ -44,31 +52,31 @@ public class PayloadCatalog {
 	}
 	
 	public boolean checkAssertion(String assertionPayload, String responseBody) {
-		if(isReferencedPayload(assertionPayload)){
+		if(quironParser.isQuironEL(assertionPayload)){
 			JsonElement responseJson = parser.parse(responseBody);
-			JsonElement expectedJson = parser.parse(this.externalPayloadReferences.get(extractPayloadCode(assertionPayload)));
+			JsonElement expectedJson = parser.parse(this.externalPayloadReferences.get(quironParser.unwrap(assertionPayload)));
 			return responseJson.toString().equals(expectedJson.toString());
 		}else{
 			return assertionPayload.equals(responseBody);
 		}
 	}
-
-	private String extractPayloadCode(String assertionPayload) {
-		return assertionPayload.substring(2,assertionPayload.length()-1);
-	}
-
-	private boolean isReferencedPayload(String assertionPayload) {
-		return EL_REGEX.matcher(assertionPayload).matches();
-	}
 	
-	public String getPayload(String request){
+	public String getJsonBody(String request){
 		String key;
-		if(isReferencedPayload(request)){
-			key = extractPayloadCode(request);
+		if(quironParser.isQuironEL(request)){
+			key = quironParser.unwrap(request);
 		}else{
 			key = request;
 		}
 		return this.externalPayloadReferences.get(key);
+	}
+
+	public Map<String,RestMethodDependency> listApiDependencies() {
+		if(this.dependencies == null){
+			RestMethodDependency[] dependencies = new Gson().fromJson(this.externalPayloadReferences.get("quiron-dependencies.json"),RestMethodDependency[].class);
+			this.dependencies = Arrays.asList(dependencies).stream().collect(Collectors.toMap(d->d.getId(), Function.identity()));
+		}
+		return this.dependencies;
 	}
 
 }

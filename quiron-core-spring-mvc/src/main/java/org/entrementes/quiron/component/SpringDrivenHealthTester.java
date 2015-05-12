@@ -31,13 +31,13 @@ public class SpringDrivenHealthTester {
 	
 	private ConstantsParser parser;
 	
-	private PayloadCatalog referencedPayloads;
+	private JsonCatalog jsonCatalog;
 
 	@Autowired
-	public SpringDrivenHealthTester(ConstantsParser parser, PayloadCatalog referencedPayloads) {
+	public SpringDrivenHealthTester(ConstantsParser parser, JsonCatalog referencedPayloads) {
 		this.rest = new RestTemplate();
 		this.parser = parser;
-		this.referencedPayloads = referencedPayloads;
+		this.jsonCatalog = referencedPayloads;
 	}
 	
 	public RestAPIHealth test(String rootPath, RestAPI api) {
@@ -88,7 +88,7 @@ public class SpringDrivenHealthTester {
 			HttpStatus chosenStatus = (HttpStatus) this.parser.parseStatus(templateResponse.getCode());
 			ResponseEntity<String> response = this.rest.exchange(rootPath + method.getPath(), chosenMethod, request, String.class);
 			boolean assertResponseCode = chosenStatus.equals(response.getStatusCode());
-			boolean assertResponseBody = this.referencedPayloads.checkAssertion(templateResponse.getBody(), response.getBody());
+			boolean assertResponseBody = this.jsonCatalog.checkAssertion(templateResponse.getBody(), response.getBody());
 			System.out.println(assertResponseBody);
 			System.out.println(assertResponseCode);
 		}

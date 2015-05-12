@@ -4,7 +4,7 @@ import org.entrementes.quiron.model.constants.QuironParamType;
 
 public @interface ApiRequestParam {
 
-	String name();
+	String name() default "";
 
 	QuironParamType type();
 

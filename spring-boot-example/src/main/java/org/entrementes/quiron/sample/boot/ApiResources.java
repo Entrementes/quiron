@@ -1,7 +1,10 @@
 package org.entrementes.quiron.sample.boot;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.entrementes.quiron.annotation.ApiDependency;
 import org.entrementes.quiron.annotation.ApiMethod;
 import org.entrementes.quiron.annotation.ApiResource;
 import org.entrementes.quiron.model.RestInterface;
@@ -30,6 +33,15 @@ public class ApiResources {
 	@ResponseBody
 	public RestInterface map( HttpServletRequest request ) {
 		return this.service.getApi(request);
+	}
+	
+	@ApiMethod(id="dependencies", dependencies={
+			@ApiDependency(id="${google-search}")
+	})
+	@RequestMapping(value="/dependencies",method=RequestMethod.GET)
+	@ResponseBody
+	public Map<String,RestMethodDependency> dependencies() {
+		return this.service.listApiDependencies();
 	}
 	
 	@ApiMethod(id="health-check")

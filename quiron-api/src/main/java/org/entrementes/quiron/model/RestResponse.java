@@ -1,8 +1,11 @@
 package org.entrementes.quiron.model;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.entrementes.quiron.model.constants.QuironHttpStatus;
@@ -20,8 +23,9 @@ public class RestResponse {
 	@XmlElement(name="description", required=false)
 	private String description;
 	
-	@XmlElement(name="assertion-payload", required=false)
-	private String assertionPayload;
+	@XmlElementWrapper(name="assertion-parameters", required=false)
+	@XmlElement(name="assertion-parameter", required=true)
+	private List<RestResponseAssertionParam> assertionParameters;
 	
 	public RestResponse() {}
 
@@ -49,12 +53,13 @@ public class RestResponse {
 		this.description = description;
 	}
 
-	public String getAssertionPayload() {
-		return assertionPayload;
+	public List<RestResponseAssertionParam> getAssertionParameters() {
+		return assertionParameters;
 	}
 
-	public void setAssertionPayload(String assertionPayload) {
-		this.assertionPayload = assertionPayload;
+	public void setAssertionParameters(
+			List<RestResponseAssertionParam> assertionParameters) {
+		this.assertionParameters = assertionParameters;
 	}
 
 }

@@ -11,6 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.entrementes.quiron.annotation.ApiDependency;
 import org.entrementes.quiron.annotation.ApiMethod;
+import org.entrementes.quiron.annotation.ApiRequestParam;
 import org.entrementes.quiron.annotation.ApiResource;
 import org.entrementes.quiron.annotation.ApiResponse;
 import org.entrementes.quiron.model.RestAPI;
@@ -19,9 +20,13 @@ import org.entrementes.quiron.model.RestMethodDependency;
 import org.entrementes.quiron.model.RestParameter;
 import org.entrementes.quiron.model.RestResource;
 import org.entrementes.quiron.model.RestResponse;
+import org.entrementes.quiron.model.RestResponseAssertionParam;
 import org.entrementes.quiron.model.builder.JavaTypeToXml;
+import org.entrementes.quiron.model.constants.QuironParamType;
+import org.entrementes.quiron.model.constants.QuironELParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +39,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class SpringAnnotationParser {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SpringAnnotationParser.class.getCanonicalName());
+	
+	private JsonCatalog jsonCatalog;
+	
+	private QuironELParser parser;
+	
+	@Autowired
+	public SpringAnnotationParser(JsonCatalog jsonCatalog) {
+		this.jsonCatalog = jsonCatalog;
+		this.parser = new QuironELParser();
+	}
 	
 	public RestAPI buildApi(ApplicationContext springContext, String id, String version) {
 		RestAPI result = new RestAPI();
@@ -90,14 +105,20 @@ public class SpringAnnotationParser {
 		List<RestMethodDependency> result = new ArrayList<RestMethodDependency>();
 		ApiDependency[] dependencies = apiMethod.dependencies();
 		for(ApiDependency dependency : dependencies){
-			RestMethodDependency mappedDependency = new RestMethodDependency();
-			mappedDependency.setHost(dependency.host());
-			mappedDependency.setContext(dependency.context());
-			mappedDependency.setId(dependency.id());
-			mappedDependency.setPath(dependency.path());
-			mappedDependency.setPort(dependency.port());
-			mappedDependency.setMethodType(dependency.methodType());
-			result.add(mappedDependency);
+			if(this.parser.isQuironEL(dependency.id())){
+				RestMethodDependency cataloggedDependency = this.jsonCatalog.listApiDependencies().get(this.parser.unwrap(dependency.id()));
+				cataloggedDependency.setUsed(true);
+				result.add(cataloggedDependency);
+			}else{
+				RestMethodDependency mappedDependency = new RestMethodDependency();
+				mappedDependency.setHost(dependency.host());
+				mappedDependency.setContext(dependency.context());
+				mappedDependency.setId(dependency.id());
+				mappedDependency.setPath(dependency.path());
+				mappedDependency.setPort(dependency.port());
+				mappedDependency.setMethodType(dependency.methodType());
+				result.add(mappedDependency);
+			}
 		}
 		return result;
 	}
@@ -109,7 +130,27 @@ public class SpringAnnotationParser {
 			RestResponse mappedResponse = new RestResponse();
 			mappedResponse.setDescription(response.description());
 			mappedResponse.setCode(response.code());
-			mappedResponse.setBody(response.body());
+			if(this.parser.isQuironEL(response.body())){
+				String key = this.parser.unwrap(response.body());
+				mappedResponse.setBody(this.jsonCatalog.getJsonBody(key));
+			}else{
+				mappedResponse.setBody(response.body());
+			}
+			List<RestResponseAssertionParam> assertionParameters = new ArrayList<RestResponseAssertionParam>();
+			for(ApiRequestParam param : response.requestParams()){
+				RestResponseAssertionParam testParameter = new RestResponseAssertionParam();
+				testParameter.setName(param.name());
+				testParameter.setType(param.type());
+				if(this.parser.isQuironEL(param.value())){
+					String key = this.parser.unwrap(param.value());
+					testParameter.setValue(this.jsonCatalog.getJsonBody(key));
+				}else{
+					testParameter.setValue(param.value());
+				}
+				assertionParameters.add(testParameter);
+				
+			}
+			mappedResponse.setAssertionParameters(assertionParameters);
 			result.add(mappedResponse);
 		}
 		return result;
@@ -136,7 +177,7 @@ public class SpringAnnotationParser {
 			if(parameter.isAnnotationPresent(RequestParam.class)){
 				mappedParam = new RestParameter();
 				RequestParam requestParam = parameter.getAnnotation(RequestParam.class);
-				mappedParam.setStyle("query");
+				mappedParam.setStyle(QuironParamType.QUERY);
 				mappedParam.setName(requestParam.value());
 				mappedParam.setType(extractParameterType(parameter));
 				mappedParam.setRequired(requestParam.required());
@@ -144,14 +185,14 @@ public class SpringAnnotationParser {
 			if(parameter.isAnnotationPresent(PathVariable.class)){
 				mappedParam = new RestParameter();
 				PathVariable pathVariable = parameter.getAnnotation(PathVariable.class);
-				mappedParam.setStyle("uri");
+				mappedParam.setStyle(QuironParamType.URI);
 				mappedParam.setName(pathVariable.value());
 				mappedParam.setType(extractParameterType(parameter));
 				mappedParam.setRequired(true);
 			}
 			if(parameter.isAnnotationPresent(RequestBody.class)){
 				mappedParam = new RestParameter();
-				mappedParam.setStyle("body");
+				mappedParam.setStyle(QuironParamType.BODY);
 				mappedParam.setName(null);
 				mappedParam.setType(extractParameterType(parameter));
 				mappedParam.setRequired(true);

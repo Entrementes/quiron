@@ -27,6 +27,9 @@ public class RestMethodDependency {
 	@XmlElement(name="method-type", required=true)
 	private String methodType;
 	
+	@XmlElement(name="used")
+	private boolean used;
+	
 	public RestMethodDependency() {}
 	
 	public String getId() {
@@ -75,6 +78,14 @@ public class RestMethodDependency {
 
 	public void setMethodType(String type) {
 		this.methodType = type;
+	}
+
+	public boolean isUsed() {
+		return used;
+	}
+
+	public void setUsed(boolean used) {
+		this.used = used;
 	}
 
 }
