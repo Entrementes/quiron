@@ -5,16 +5,20 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.entrementes.quiron.model.constants.QuironHttpStatus;
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface ApiResponse {
 	
-	public int code();
+	public QuironHttpStatus code();
 	
 	public String body() default "";
 	
 	public String description() default "";
 	
-	public ApiAssertionTest[] assertionTest() default {};
+	public String requestBody() default "";
+
+	public String requestParams() default "";
 
 }

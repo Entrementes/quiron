@@ -54,13 +54,16 @@ public class SpringMvcInspectionService implements InspectionServce {
 		return new SpringWebApplicationBuilder()
 							.api(this.api)
 							.request(request)
-						.build();
+						.buildRestInterface();
 	}
 
 	@Override
 	public RestInterfaceHealth getStatus(HttpServletRequest request) {
-		RestAPIHealth healthCheck = this.healthTester.test(this.api);
-		RestInterfaceHealth result = new RestInterfaceHealth();
+		RestInterfaceHealth result = new SpringWebApplicationBuilder()
+					.api(this.api)
+					.request(request)
+				.buildRestInterfaceHealth();
+		RestAPIHealth healthCheck = this.healthTester.test(result.buildUri(), this.api);
 		result.setApi(healthCheck);
 		return result;
 	}

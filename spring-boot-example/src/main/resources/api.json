@@ -1,0 +1,35 @@
+{
+  "host": "http:\/\/localhost",
+  "port": 7777,
+  "context": "\/web-app\/v1",
+  "api": {
+    "version": "1.0",
+    "id": "quiron",
+    "resources": [
+      {
+        "id": "example",
+        "methods": [
+          {
+            "path": "\/quiron\/",
+            "parameters": [
+              
+            ],
+            "responses": [
+              {
+                "code": "OK",
+                "body": "${api.json}",
+                "description": "example WADL",
+                "assertionPayload": null
+              }
+            ],
+            "dependencies": [
+              
+            ],
+            "methodType": "GET",
+            "id": "api"
+          }
+        ]
+      }
+    ]
+  }
+}

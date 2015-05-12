@@ -1,16 +1,13 @@
 package org.entrementes.quiron.model;
 
-import java.util.Map;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name="response-health")
+@XmlRootElement(name="response")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class RestResponseHealth {
+public class RestMethodAssertion {
 	
 	@XmlElement(name="code", required=true)
 	private Integer code;
@@ -21,13 +18,14 @@ public class RestResponseHealth {
 	@XmlElement(name="description", required=false)
 	private String description;
 	
-	@XmlElementWrapper(name="assertion-test", required=false)
-	private Map<String, Object> assertionTest;
-
-	@XmlElement(name="passed", required=false)
+	@XmlElement(name="assertion-payload", required=false)
+	private String assertionPayload;
+	
+	@XmlElement(name="passed", required=true)
 	private Boolean passed;
 	
-	public RestResponseHealth() {}
+	public RestMethodAssertion() {
+	}
 
 	public Integer getCode() {
 		return code;
@@ -53,12 +51,12 @@ public class RestResponseHealth {
 		this.description = description;
 	}
 
-	public Map<String, Object> getAssertionTest() {
-		return assertionTest;
+	public String getAssertionPayload() {
+		return assertionPayload;
 	}
 
-	public void setAssertionTest(Map<String, Object> assertionTest) {
-		this.assertionTest = assertionTest;
+	public void setAssertionPayload(String assertionPayload) {
+		this.assertionPayload = assertionPayload;
 	}
 
 	public Boolean getPassed() {
@@ -68,5 +66,5 @@ public class RestResponseHealth {
 	public void setPassed(Boolean passed) {
 		this.passed = passed;
 	}
-	
+
 }

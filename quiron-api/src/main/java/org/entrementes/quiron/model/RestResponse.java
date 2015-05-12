@@ -1,19 +1,18 @@
 package org.entrementes.quiron.model;
 
-import java.util.Map;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.entrementes.quiron.model.constants.QuironHttpStatus;
 
 @XmlRootElement(name="response")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RestResponse {
 	
 	@XmlElement(name="code", required=true)
-	private Integer code;
+	private QuironHttpStatus code;
 	
 	@XmlElement(name="body", required=true)
 	private String body;
@@ -21,16 +20,16 @@ public class RestResponse {
 	@XmlElement(name="description", required=false)
 	private String description;
 	
-	@XmlElementWrapper(name="assertion-test", required=false)
-	private Map<String, Object> assertionTest;
+	@XmlElement(name="assertion-payload", required=false)
+	private String assertionPayload;
 	
 	public RestResponse() {}
 
-	public Integer getCode() {
+	public QuironHttpStatus getCode() {
 		return code;
 	}
 
-	public void setCode(Integer code) {
+	public void setCode(QuironHttpStatus code) {
 		this.code = code;
 	}
 
@@ -50,12 +49,12 @@ public class RestResponse {
 		this.description = description;
 	}
 
-	public Map<String, Object> getAssertionTest() {
-		return assertionTest;
+	public String getAssertionPayload() {
+		return assertionPayload;
 	}
 
-	public void setAssertionTest(Map<String, Object> assertionTest) {
-		this.assertionTest = assertionTest;
+	public void setAssertionPayload(String assertionPayload) {
+		this.assertionPayload = assertionPayload;
 	}
 
 }

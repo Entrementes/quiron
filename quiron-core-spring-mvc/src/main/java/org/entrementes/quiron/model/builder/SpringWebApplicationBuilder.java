@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.entrementes.quiron.model.RestAPI;
 import org.entrementes.quiron.model.RestInterface;
+import org.entrementes.quiron.model.RestInterfaceHealth;
 
 public class SpringWebApplicationBuilder {
 
@@ -21,7 +22,7 @@ public class SpringWebApplicationBuilder {
 		return this;
 	}
 
-	public RestInterface build() {
+	public RestInterface buildRestInterface() {
 		RestInterface result = new RestInterface();
 		result.setContext(this.request.getContextPath());
 		result.setPort(request.getServerPort());
@@ -29,8 +30,20 @@ public class SpringWebApplicationBuilder {
 		builder.append(request.getScheme()).append("://")
 				.append(request.getServerName());
 		result.setHost(builder.toString());
-		result.setApi(this.api );
+		result.setApi(this.api);
 		return result;
+	}
+
+	public RestInterfaceHealth buildRestInterfaceHealth() {
+		RestInterfaceHealth result = new RestInterfaceHealth();
+		result.setContext(this.request.getContextPath());
+		result.setPort(request.getServerPort());
+		StringBuilder builder = new StringBuilder();
+		builder.append(request.getScheme()).append("://")
+				.append(request.getServerName());
+		result.setHost(builder.toString());
+		return result;
+		
 	}
 
 }

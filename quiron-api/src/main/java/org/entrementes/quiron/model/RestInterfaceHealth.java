@@ -1,11 +1,8 @@
 package org.entrementes.quiron.model;
 
-import java.util.List;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name="rest-interface-health")
@@ -56,6 +53,10 @@ public class RestInterfaceHealth {
 
 	public void setApi(RestAPIHealth api) {
 		this.api = api;
+	}
+
+	public String buildUri() {
+		return this.host + ":" + this.port + "/" + this.context;
 	}
 
 }

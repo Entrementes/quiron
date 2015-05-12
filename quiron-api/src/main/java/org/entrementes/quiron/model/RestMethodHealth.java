@@ -19,8 +19,9 @@ public class RestMethodHealth {
 	@XmlElementWrapper(name="parameters", required=false)
 	private List<RestParameter> parameters;
 	
+	@XmlElementWrapper(name="responses", required=true)
 	@XmlElement(name="response", required=true)
-	private RestResponseHealth response;
+	private List<RestMethodAssertion> responses;
 	
 	@XmlElement(name="method-type", required=true)
 	private String methodType;
@@ -40,12 +41,12 @@ public class RestMethodHealth {
 		this.path = path;
 	}
 
-	public RestResponseHealth getResponse() {
-		return response;
+	public List<RestMethodAssertion> getResponses() {
+		return responses;
 	}
 
-	public void setResponse(RestResponseHealth response) {
-		this.response = response;
+	public void setResponses(List<RestMethodAssertion> responses) {
+		this.responses = responses;
 	}
 
 	public String getMethodType() {
