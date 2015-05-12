@@ -7,9 +7,11 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 
 import org.entrementes.quiron.component.SpringAnnotationParser;
+import org.entrementes.quiron.component.SpringDrivenHealthTester;
 import org.entrementes.quiron.exception.ExceptionCode;
 import org.entrementes.quiron.exception.QuironException;
 import org.entrementes.quiron.model.RestAPI;
+import org.entrementes.quiron.model.RestAPIHealth;
 import org.entrementes.quiron.model.RestInterface;
 import org.entrementes.quiron.model.RestInterfaceHealth;
 import org.entrementes.quiron.model.RestMethod;
@@ -30,17 +32,21 @@ public class SpringMvcInspectionService implements InspectionServce {
 			.getLogger(SpringMvcInspectionService.class.getCanonicalName());
 
 	private SpringAnnotationParser annotationParser;
+	
+	private SpringDrivenHealthTester healthTester;
 
 	private RestAPI api;
 
 	@Autowired
 	public SpringMvcInspectionService(ApplicationContext springContext,
-			SpringAnnotationParser annotationParser,
-			@Value("${api.version}") String version,
-			@Value("${api.id}") String id) {
+								SpringAnnotationParser annotationParser,
+								SpringDrivenHealthTester healthTester,
+								@Value("${api.version}") String version,
+								@Value("${api.id}") String id) {
 		this.annotationParser = annotationParser;
 		LOGGER.debug("building API with annotation parsing strattegy.");
 		this.api = this.annotationParser.buildApi(springContext, id, version);
+		this.healthTester = healthTester;
 	}
 
 	@Override
@@ -52,9 +58,11 @@ public class SpringMvcInspectionService implements InspectionServce {
 	}
 
 	@Override
-	public RestInterfaceHealth getStatus() {
-		// TODO Auto-generated method stub
-		return null;
+	public RestInterfaceHealth getStatus(HttpServletRequest request) {
+		RestAPIHealth healthCheck = this.healthTester.test(this.api);
+		RestInterfaceHealth result = new RestInterfaceHealth();
+		result.setApi(healthCheck);
+		return result;
 	}
 
 	@Override

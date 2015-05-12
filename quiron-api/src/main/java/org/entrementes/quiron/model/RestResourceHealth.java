@@ -25,7 +25,7 @@ public class RestResourceHealth {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setId(String name) {
 		this.name = name;
 	}
 

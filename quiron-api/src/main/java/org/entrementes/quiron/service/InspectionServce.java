@@ -12,7 +12,7 @@ public interface InspectionServce {
 	
 	RestInterface getApi(HttpServletRequest request);
 	
-	RestInterfaceHealth getStatus();
+	RestInterfaceHealth getStatus(HttpServletRequest request);
 	
 	RestResource getResource(String resourceId);
 	

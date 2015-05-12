@@ -9,6 +9,7 @@ import org.entrementes.quiron.annotation.ApiResource;
 import org.entrementes.quiron.annotation.ApiResponse;
 import org.entrementes.quiron.model.RestAPI;
 import org.entrementes.quiron.model.RestInterface;
+import org.entrementes.quiron.model.RestInterfaceHealth;
 import org.entrementes.quiron.model.RestMethod;
 import org.entrementes.quiron.model.RestMethodDependency;
 import org.entrementes.quiron.model.RestResource;
@@ -41,6 +42,12 @@ public class Example {
 	@ResponseBody
 	public RestInterface api( HttpServletRequest request ) {
 		return this.service.getApi(request);
+	}
+	
+	@RequestMapping(value="/health",method=RequestMethod.GET)
+	@ResponseBody
+	public RestInterfaceHealth health( HttpServletRequest request ) {
+		return this.service.getStatus(request);
 	}
 	
 	@ApiMethod(id="resource-search")

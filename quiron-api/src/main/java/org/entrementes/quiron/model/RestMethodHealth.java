@@ -22,8 +22,15 @@ public class RestMethodHealth {
 	@XmlElement(name="response", required=true)
 	private RestResponseHealth response;
 	
-	@XmlElement(name="type", required=true)
-	private String type;
+	@XmlElement(name="method-type", required=true)
+	private String methodType;
+
+	@XmlElement(name="id", required=true)
+	private String id;
+
+	@XmlElement(name="dependency", required=true)
+	@XmlElementWrapper(name="dependencies", required=false)
+	private List<RestMethodDependency> dependencies;
 
 	public String getPath() {
 		return path;
@@ -41,12 +48,12 @@ public class RestMethodHealth {
 		this.response = response;
 	}
 
-	public String getType() {
-		return type;
+	public String getMethodType() {
+		return methodType;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setMethodType(String type) {
+		this.methodType = type;
 	}
 
 	public List<RestParameter> getParameters() {
@@ -55,6 +62,19 @@ public class RestMethodHealth {
 
 	public void setParameters(List<RestParameter> parameters) {
 		this.parameters = parameters;
+	}
+
+	public String getId() {
+		return id;
+	}
+	
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public void setDependencies(List<RestMethodDependency> dependencies) {
+		this.dependencies = dependencies;
+		
 	}
 
 }

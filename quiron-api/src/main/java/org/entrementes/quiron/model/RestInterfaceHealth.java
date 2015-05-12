@@ -21,9 +21,8 @@ public class RestInterfaceHealth {
 	@XmlElement(name="context", required=false)
 	private String context;
 	
-	@XmlElementWrapper(name="apis", required=true)
 	@XmlElement(name="api")
-	private List<RestAPIHealth> apis;
+	private RestAPIHealth api;
 	
 	public RestInterfaceHealth() {}
 
@@ -51,12 +50,12 @@ public class RestInterfaceHealth {
 		this.context = context;
 	}
 
-	public List<RestAPIHealth> getApis() {
-		return apis;
+	public RestAPIHealth getApi() {
+		return api;
 	}
 
-	public void setApis(List<RestAPIHealth> apis) {
-		this.apis = apis;
+	public void setApi(RestAPIHealth api) {
+		this.api = api;
 	}
 
 }
