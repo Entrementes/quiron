@@ -29,42 +29,42 @@ public class ApiResources {
 	private InspectionServce service;
 	
 	@ApiMethod(id="map", description="map web-application WADL.")
-	@RequestMapping(value="/map",method=RequestMethod.GET)
+	@RequestMapping(value="/map",method=RequestMethod.GET, produces="application/json")
 	@ResponseBody
 	public RestInterface map( HttpServletRequest request ) {
 		return this.service.getApi(request);
 	}
 	
 	@ApiMethod(id="dependencies", description="list web-application external dependencies.")
-	@RequestMapping(value="/dependencies",method=RequestMethod.GET)
+	@RequestMapping(value="/dependencies",method=RequestMethod.GET, produces="application/json")
 	@ResponseBody
 	public Map<String,RestMethodDependency> dependencies() {
 		return this.service.listApiDependencies();
 	}
 	
 	@ApiMethod(id="health-check", description="check api responses based onf supplied request templates.")
-	@RequestMapping(value="/health",method=RequestMethod.GET)
+	@RequestMapping(value="/health",method=RequestMethod.GET, produces="application/json")
 	@ResponseBody
 	public RestInterfaceHealth health( @RequestParam(value="failuresOnly", required=false, defaultValue="false") Boolean failuresOnly , HttpServletRequest request ) {
 		return this.service.getStatus(request,failuresOnly);
 	}
 	
 	@ApiMethod(id="resource-search", description="look for a specific resource on the api's structure.")
-	@RequestMapping(value="/query/{resource-id}",method=RequestMethod.GET)
+	@RequestMapping(value="/query/{resource-id}",method=RequestMethod.GET, produces="application/json")
 	@ResponseBody
 	public RestResource resource(@PathVariable("resource-id") String resourceId) {
 		return this.service.getResource(resourceId);
 	}
 	
 	@ApiMethod(id="method-search", description="look for a specific method on the api's structure.")
-	@RequestMapping(value="/query/{resource-id}/{method-id}",method=RequestMethod.GET)
+	@RequestMapping(value="/query/{resource-id}/{method-id}",method=RequestMethod.GET, produces="application/json")
 	@ResponseBody
 	public RestMethod method(@PathVariable("resource-id") String resourceId, @PathVariable("method-id") String methodId) {
 		return this.service.getMethod(resourceId, methodId);
 	}
 	
 	@ApiMethod(id="dependency-search", description="look for a specific dependency on the api's structure.")
-	@RequestMapping(value="/query/{resource-id}/{method-id}/{dependency-id}",method=RequestMethod.GET)
+	@RequestMapping(value="/query/{resource-id}/{method-id}/{dependency-id}",method=RequestMethod.GET, produces="application/json")
 	@ResponseBody
 	public RestMethodDependency dependency(@PathVariable("resource-id") String resourceId, @PathVariable("method-id") String methodId, @PathVariable("dependency-id") String dependencyId) {
 		return this.service.getMethodDependency(resourceId, methodId, dependencyId);
