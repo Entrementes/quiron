@@ -15,6 +15,9 @@ public class RestMethodHealth {
 	@XmlElement(name="path", required=false)
 	private String path;
 	
+	@XmlElement(name = "description", required = false)
+	private String description;
+	
 	@XmlElement(name="parameter", required=true)
 	@XmlElementWrapper(name="parameters", required=false)
 	private List<RestParameter> parameters;
@@ -39,6 +42,18 @@ public class RestMethodHealth {
 
 	public void setPath(String path) {
 		this.path = path;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public List<RestMethodDependency> getDependencies() {
+		return dependencies;
 	}
 
 	public List<RestMethodAssertion> getResponses() {

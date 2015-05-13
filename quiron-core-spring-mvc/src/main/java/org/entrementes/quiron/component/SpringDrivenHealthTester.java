@@ -45,43 +45,50 @@ public class SpringDrivenHealthTester {
 		this.jsonCatalog = referencedPayloads;
 	}
 	
-	public RestAPIHealth test(UriComponentsBuilder builder, RestAPI api) {
+	public RestAPIHealth test(UriComponentsBuilder builder, RestAPI api, boolean failuresOnly) {
 		RestAPIHealth result = new RestAPIHealth();
-		result.setVersion(api.getVersion());
-		List<RestResourceHealth> resources = checkResources(builder ,api.getResources());
-		result.setResources(resources);
+		List<RestResourceHealth> resources = checkResources(builder ,api.getResources(), failuresOnly);
+		if(!failuresOnly || ( resources.size() > 0 && failuresOnly )){
+			result.setVersion(api.getVersion());
+			result.setResources(resources);
+		}
 		return result;
 	}
 
-	private List<RestResourceHealth> checkResources(UriComponentsBuilder builder, List<RestResource> resources) {
+	private List<RestResourceHealth> checkResources(UriComponentsBuilder builder, List<RestResource> resources, boolean failuresOnly) {
 		List<RestResourceHealth> result = new ArrayList<RestResourceHealth>();
 		for(RestResource resource : resources){
-			RestResourceHealth healthCheck = new RestResourceHealth();
-			healthCheck.setId(resource.getId());
-			List<RestMethodHealth> methodsHealth = checkMethods(builder, resource.getMethods());
-			healthCheck.setMethods(methodsHealth);
-			result.add(healthCheck);
+			List<RestMethodHealth> methodsHealth = checkMethods(builder, resource.getMethods(), failuresOnly);
+			if(!failuresOnly || ( methodsHealth.size() > 0 && failuresOnly )){
+				RestResourceHealth healthCheck = new RestResourceHealth();
+				healthCheck.setId(resource.getId());
+				healthCheck.setMethods(methodsHealth);
+				result.add(healthCheck);
+			}
 		}
 		return result;
 	}
 
-	private List<RestMethodHealth> checkMethods(UriComponentsBuilder builder, List<RestMethod> methods) {
+	private List<RestMethodHealth> checkMethods(UriComponentsBuilder builder, List<RestMethod> methods, boolean failuresOnly) {
 		List<RestMethodHealth> result = new ArrayList<RestMethodHealth>();
 		for(RestMethod method : methods){
-			RestMethodHealth healthCheck = new RestMethodHealth();
-			healthCheck.setMethodType(method.getMethodType());
-			healthCheck.setId(method.getId());
-			healthCheck.setPath(method.getPath());
-			healthCheck.setParameters(method.getParameters());
-			healthCheck.setDependencies(method.getDependencies());
-			List<RestMethodAssertion> assertions = checkAssertions(builder, method);
-			healthCheck.setResponses(assertions);
-			result.add(healthCheck);
+			List<RestMethodAssertion> assertions = checkAssertions(builder, method, failuresOnly);
+			if(!failuresOnly || ( assertions.size() > 0 && failuresOnly )){
+				RestMethodHealth healthCheck = new RestMethodHealth();
+				healthCheck.setMethodType(method.getMethodType());
+				healthCheck.setId(method.getId());
+				healthCheck.setPath(method.getPath());
+				healthCheck.setParameters(method.getParameters());
+				healthCheck.setDependencies(method.getDependencies());
+				healthCheck.setDescription(method.getDescription());
+				healthCheck.setResponses(assertions);
+				result.add(healthCheck);
+			}
 		}
 		return result;
 	}
 
-	private List<RestMethodAssertion> checkAssertions(UriComponentsBuilder builder,RestMethod method) {
+	private List<RestMethodAssertion> checkAssertions(UriComponentsBuilder builder,RestMethod method, boolean failuresOnly) {
 		List<RestMethodAssertion> result = new ArrayList<RestMethodAssertion>();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
@@ -98,27 +105,34 @@ public class SpringDrivenHealthTester {
 			extractQueryParameters(requestBuilder, templateResponse.getAssertionParameters());
 			boolean testPassed = false;
 			String apiReturned;
+			HttpStatus recievedStatus;
 			try{
 				ResponseEntity<String> response = this.rest.exchange(requestBuilder.build().toUri(), chosenMethod, request, String.class);
-				testPassed = chosenStatus.equals(response.getStatusCode());
+				recievedStatus = response.getStatusCode();
+				testPassed = chosenStatus.equals(recievedStatus);
 				if(templateResponse.getBody() != null && !templateResponse.getBody().isEmpty()){
 					testPassed = testPassed && this.jsonCatalog.checkAssertion(templateResponse.getBody(), response.getBody());
 				}
 				apiReturned = response.getBody();
 			}catch(HttpClientErrorException ex){
-				testPassed = ex.getStatusCode().equals(chosenStatus);
+				recievedStatus = ex.getStatusCode();
+				testPassed = recievedStatus.equals(chosenStatus);
 				apiReturned = ex.getResponseBodyAsString();
 			}catch(Exception ex){
 				testPassed = false;
+				recievedStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 				apiReturned = ExceptionUtils.getStackTrace(ex);
 			}
-			RestMethodAssertion mappedAssertion = new RestMethodAssertion();
-			mappedAssertion.setCode(templateResponse.getCode());
-			mappedAssertion.setAssertionParameters(templateResponse.getAssertionParameters());
-			mappedAssertion.setDescription(templateResponse.getDescription());
-			mappedAssertion.setPassed(testPassed);
-			mappedAssertion.setBody(apiReturned);
-			result.add(mappedAssertion);
+			if(!failuresOnly ||(failuresOnly && !testPassed)){
+				RestMethodAssertion mappedAssertion = new RestMethodAssertion();
+				mappedAssertion.setExpectedCode(templateResponse.getCode());
+				mappedAssertion.setRecievedCode(this.parser.parseStatus(recievedStatus));
+				mappedAssertion.setAssertionParameters(templateResponse.getAssertionParameters());
+				mappedAssertion.setDescription(templateResponse.getDescription());
+				mappedAssertion.setPassed(testPassed);
+				mappedAssertion.setBody(apiReturned);
+				result.add(mappedAssertion);
+			}
 		}
 		return result;
 	}
@@ -140,5 +154,4 @@ public class SpringDrivenHealthTester {
 		}
 		return result;
 	}
-
 }

@@ -6,5 +6,7 @@ public interface ConstantsParser {
 	Object parseMethod(String methodName);
 	
 	Object parseStatus(QuironHttpStatus status);
+	
+	QuironHttpStatus parseStatus(Object status);
 
 }

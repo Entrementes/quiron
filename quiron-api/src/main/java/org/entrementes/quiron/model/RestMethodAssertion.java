@@ -14,8 +14,11 @@ import org.entrementes.quiron.model.constants.QuironHttpStatus;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RestMethodAssertion {
 	
-	@XmlElement(name="code", required=true)
-	private QuironHttpStatus code;
+	@XmlElement(name="expected-code", required=true)
+	private QuironHttpStatus expectedCode;
+	
+	@XmlElement(name="recieved-code", required=true)
+	private QuironHttpStatus recievedCode;
 	
 	@XmlElement(name="body", required=true)
 	private String body;
@@ -31,14 +34,6 @@ public class RestMethodAssertion {
 	private List<RestResponseAssertionParam> assertionParameters;
 	
 	public RestMethodAssertion() {
-	}
-
-	public QuironHttpStatus getCode() {
-		return code;
-	}
-
-	public void setCode(QuironHttpStatus quironHttpStatus) {
-		this.code = quironHttpStatus;
 	}
 
 	public String getBody() {
@@ -67,6 +62,26 @@ public class RestMethodAssertion {
 
 	public void setAssertionParameters( List<RestResponseAssertionParam> assertionParameters) {
 		this.assertionParameters = assertionParameters;
+	}
+
+	public QuironHttpStatus getExpectedCode() {
+		return expectedCode;
+	}
+
+	public void setExpectedCode(QuironHttpStatus expectedCode) {
+		this.expectedCode = expectedCode;
+	}
+
+	public QuironHttpStatus getRecievedCode() {
+		return recievedCode;
+	}
+
+	public void setRecievedCode(QuironHttpStatus recievedCode) {
+		this.recievedCode = recievedCode;
+	}
+
+	public List<RestResponseAssertionParam> getAssertionParameters() {
+		return assertionParameters;
 	}
 
 }

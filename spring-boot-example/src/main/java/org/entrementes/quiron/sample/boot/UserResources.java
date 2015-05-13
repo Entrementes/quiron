@@ -31,9 +31,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/users")
 public class UserResources {
 	
-	@ApiMethod(id="list", responses={
-			@ApiResponse(code=OK, description="list all users"),
-			@ApiResponse(code=OK, description="list users with pagination", requestParams={
+	@ApiMethod(id="list", description="list all users.", responses={
+			@ApiResponse(code=OK, description="no pagination result."),
+			@ApiResponse(code=OK, description="pagination result.", requestParams={
 				@ApiRequestParam(name="size", type=QuironParamType.QUERY, value="10")
 			})
 	})
@@ -55,9 +55,9 @@ public class UserResources {
 		return result;
 	}
 	
-	@ApiMethod(id="create", responses={
-			@ApiResponse(code=CREATED, body="${create-response.json}", requestParams={@ApiRequestParam(value="${create-request.json}", type = QuironParamType.BODY)}),
-			@ApiResponse(code=BAD_REQUEST, requestParams={@ApiRequestParam(value="${create-bad-request.json}", type = QuironParamType.BODY)})
+	@ApiMethod(id="create", description="create new user.", responses={
+			@ApiResponse(code=CREATED, description="request body complete, user created.", body="${create-response.json}", requestParams={@ApiRequestParam(value="${create-request.json}", type = QuironParamType.BODY)}),
+			@ApiResponse(code=BAD_REQUEST, description="missing attributes in request body, user not created.", requestParams={@ApiRequestParam(value="${create-bad-request.json}", type = QuironParamType.BODY)})
 	})
 	@RequestMapping(value="/",method=RequestMethod.POST, consumes="application/json", produces="application/json")
 	@ResponseBody
@@ -69,9 +69,9 @@ public class UserResources {
 		return new ResponseEntity<User>(newUser,HttpStatus.CREATED);
 	}
 	
-	@ApiMethod(id="read", responses={
-			@ApiResponse(code=OK, body="${read-response.json}", requestParams={@ApiRequestParam(name="id", type=QuironParamType.URI, value="1")}),
-			@ApiResponse(code=NOT_FOUND, requestParams={@ApiRequestParam(name="id", type=QuironParamType.URI, value="7")})	
+	@ApiMethod(id="read", description="find user by id.", responses={
+			@ApiResponse(code=OK, description="user id is present in the database, returning user information.", body="${read-response.json}", requestParams={@ApiRequestParam(name="id", type=QuironParamType.URI, value="1")}),
+			@ApiResponse(code=NOT_FOUND, description="user id is NOT present in the database, no user information found.", requestParams={@ApiRequestParam(name="id", type=QuironParamType.URI, value="7")})	
 	})
 	@RequestMapping(value="/{id}",method=RequestMethod.GET, produces="application/json")
 	@ResponseBody
@@ -83,14 +83,14 @@ public class UserResources {
 		}
 	}
 	
-	@ApiMethod(id="update", responses={
-			@ApiResponse(code=OK, body="${update-response.json}", requestParams={@ApiRequestParam(name="id", type=QuironParamType.URI, value="1"),
+	@ApiMethod(id="update", description="uptade user.", responses={
+			@ApiResponse(code=OK, description="request body complete, user updated.", body="${update-response.json}", requestParams={@ApiRequestParam(name="id", type=QuironParamType.URI, value="1"),
 																				@ApiRequestParam(value="${update-request.json}", type = QuironParamType.BODY)
 																			}),
-			@ApiResponse(code=NOT_FOUND, requestParams={@ApiRequestParam(name="id", type=QuironParamType.URI, value="7"),
+			@ApiResponse(code=NOT_FOUND, description="user id is NOT present in the database, user not updated.", requestParams={@ApiRequestParam(name="id", type=QuironParamType.URI, value="7"),
 														@ApiRequestParam(value="${update-request.json}", type = QuironParamType.BODY)
 													}),
-			@ApiResponse(code=BAD_REQUEST, requestParams={ @ApiRequestParam(name="id", type=QuironParamType.URI, value="1"),
+			@ApiResponse(code=BAD_REQUEST, description="missing attributes in request body, user not updated.", requestParams={ @ApiRequestParam(name="id", type=QuironParamType.URI, value="1"),
 															@ApiRequestParam(value="${update-bad-request.json}", type = QuironParamType.BODY)
 														})
 													})
@@ -106,9 +106,9 @@ public class UserResources {
 		return new ResponseEntity<User>(updatedUser,HttpStatus.OK);
 	}
 	
-	@ApiMethod(id="delete", responses={
-			@ApiResponse(code=OK, body="${delete-response.json}", requestParams={@ApiRequestParam(name="id", type=QuironParamType.URI, value="1")}),
-			@ApiResponse(code=NOT_FOUND, requestParams={@ApiRequestParam(name="id", type=QuironParamType.URI, value="7")})	
+	@ApiMethod(id="delete", description="delete user by id.", responses={
+			@ApiResponse(code=OK, description="user id is present in the database, user deleted.", body="${delete-response.json}", requestParams={@ApiRequestParam(name="id", type=QuironParamType.URI, value="1")}),
+			@ApiResponse(code=NOT_FOUND, description="user id is NOT present in the database, user not deleted.", requestParams={@ApiRequestParam(name="id", type=QuironParamType.URI, value="7")})	
 	})
 	@RequestMapping(value="/{id}",method=RequestMethod.DELETE, produces="application/json")
 	@ResponseBody
@@ -119,8 +119,7 @@ public class UserResources {
 		return new ResponseEntity<User>(new User(1,"Ramirez",36),HttpStatus.OK);
 	}
 	
-	@ApiMethod(id="broken",
-			responses={
+	@ApiMethod(id="broken", description="this method is broken. Please hire a better DEV.", responses={
 				@ApiResponse(code=QuironHttpStatus.OK)
 	},
 			dependencies={

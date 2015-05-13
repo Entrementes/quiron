@@ -16,6 +16,8 @@ public interface InspectionServce {
 	
 	RestInterfaceHealth getStatus(HttpServletRequest request);
 	
+	RestInterfaceHealth getStatus(HttpServletRequest request, boolean failuresOnly);
+	
 	RestResource getResource(String resourceId);
 	
 	RestMethod getMethod(String resourceId, String methodId);

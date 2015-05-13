@@ -14,6 +14,9 @@ public class RestMethod {
 
 	@XmlElement(name = "path", required = false)
 	private String path;
+	
+	@XmlElement(name = "description", required = false)
+	private String description;
 
 	@XmlElement(name="parameter", required=true)
 	@XmlElementWrapper(name="parameters", required=false)
@@ -79,6 +82,14 @@ public class RestMethod {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }

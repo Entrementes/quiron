@@ -24,6 +24,9 @@ public class JavaTypeToXml {
 		if(classe.isAssignableFrom(Date.class) || classe.isAssignableFrom(Calendar.class)){
 			return "date";
 		}
+		if(classe.isAssignableFrom(Boolean.class)){
+			return "boolean";
+		}
 		return "UNDEFINED";
 	}
 

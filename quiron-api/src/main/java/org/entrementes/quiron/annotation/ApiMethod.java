@@ -15,4 +15,6 @@ public @interface ApiMethod {
 
 	public ApiResponse[] responses() default {};
 
+	public String description() default "";
+
 }

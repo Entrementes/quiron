@@ -95,6 +95,7 @@ public class SpringAnnotationParser {
 				List<RestMethodDependency> mappedDependencies = extractDependencies(apiMethod);
 				mappedMethod.setResponses(mappedResponses);
 				mappedMethod.setDependencies(mappedDependencies);
+				mappedMethod.setDescription(apiMethod.description());
 				result.add(mappedMethod);
 			}
 		}
