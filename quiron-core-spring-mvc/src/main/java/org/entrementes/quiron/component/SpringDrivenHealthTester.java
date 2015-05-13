@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.entrementes.quiron.model.RestAPI;
 import org.entrementes.quiron.model.RestAPIHealth;
 import org.entrementes.quiron.model.RestMethod;
@@ -12,8 +13,10 @@ import org.entrementes.quiron.model.RestMethodHealth;
 import org.entrementes.quiron.model.RestResource;
 import org.entrementes.quiron.model.RestResourceHealth;
 import org.entrementes.quiron.model.RestResponse;
+import org.entrementes.quiron.model.RestResponseAssertionParam;
 import org.entrementes.quiron.model.constants.ConstantsParser;
 import org.entrementes.quiron.model.constants.QuironConstants;
+import org.entrementes.quiron.model.constants.QuironParamType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -22,7 +25,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
 public class SpringDrivenHealthTester {
@@ -40,27 +45,27 @@ public class SpringDrivenHealthTester {
 		this.jsonCatalog = referencedPayloads;
 	}
 	
-	public RestAPIHealth test(String rootPath, RestAPI api) {
+	public RestAPIHealth test(UriComponentsBuilder builder, RestAPI api) {
 		RestAPIHealth result = new RestAPIHealth();
 		result.setVersion(api.getVersion());
-		List<RestResourceHealth> resources = checkResources(rootPath ,api.getResources());
+		List<RestResourceHealth> resources = checkResources(builder ,api.getResources());
 		result.setResources(resources);
 		return result;
 	}
 
-	private List<RestResourceHealth> checkResources(String rootPath, List<RestResource> resources) {
+	private List<RestResourceHealth> checkResources(UriComponentsBuilder builder, List<RestResource> resources) {
 		List<RestResourceHealth> result = new ArrayList<RestResourceHealth>();
 		for(RestResource resource : resources){
 			RestResourceHealth healthCheck = new RestResourceHealth();
 			healthCheck.setId(resource.getId());
-			List<RestMethodHealth> methodsHealth = checkMethods(rootPath, resource.getMethods());
+			List<RestMethodHealth> methodsHealth = checkMethods(builder, resource.getMethods());
 			healthCheck.setMethods(methodsHealth);
 			result.add(healthCheck);
 		}
 		return result;
 	}
 
-	private List<RestMethodHealth> checkMethods(String rootPath, List<RestMethod> methods) {
+	private List<RestMethodHealth> checkMethods(UriComponentsBuilder builder, List<RestMethod> methods) {
 		List<RestMethodHealth> result = new ArrayList<RestMethodHealth>();
 		for(RestMethod method : methods){
 			RestMethodHealth healthCheck = new RestMethodHealth();
@@ -69,28 +74,69 @@ public class SpringDrivenHealthTester {
 			healthCheck.setPath(method.getPath());
 			healthCheck.setParameters(method.getParameters());
 			healthCheck.setDependencies(method.getDependencies());
-			List<RestMethodAssertion> assertions = checkAssertions(rootPath, method);
+			List<RestMethodAssertion> assertions = checkAssertions(builder, method);
 			healthCheck.setResponses(assertions);
 			result.add(healthCheck);
 		}
 		return result;
 	}
 
-	private List<RestMethodAssertion> checkAssertions(String rootPath,RestMethod method) {
+	private List<RestMethodAssertion> checkAssertions(UriComponentsBuilder builder,RestMethod method) {
 		List<RestMethodAssertion> result = new ArrayList<RestMethodAssertion>();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.set(QuironConstants.QUIRON_HTTP_HEADER, "true");
 		for(RestResponse templateResponse : method.getResponses()){
+			UriComponentsBuilder requestBuilder = UriComponentsBuilder.fromUri(builder.build().toUri());
 			headers.set(QuironConstants.QUIRON_EXPECTED_STATUS, templateResponse.getCode().value().toString());
-			HttpEntity<String> request = new HttpEntity<String>("");
+			String requestBody = templateResponse.getRequestBody();
+			HttpEntity<String> request = new HttpEntity<String>(requestBody,headers);
 			HttpMethod chosenMethod = (HttpMethod) this.parser.parseMethod(method.getMethodType());
 			HttpStatus chosenStatus = (HttpStatus) this.parser.parseStatus(templateResponse.getCode());
-			ResponseEntity<String> response = this.rest.exchange(rootPath + method.getPath(), chosenMethod, request, String.class);
-			boolean assertResponseCode = chosenStatus.equals(response.getStatusCode());
-			boolean assertResponseBody = this.jsonCatalog.checkAssertion(templateResponse.getBody(), response.getBody());
-			System.out.println(assertResponseBody);
-			System.out.println(assertResponseCode);
+			requestBuilder.path(expandURI(method.getPath(), templateResponse.getAssertionParameters())); 
+			extractQueryParameters(requestBuilder, templateResponse.getAssertionParameters());
+			boolean testPassed = false;
+			String apiReturned;
+			try{
+				ResponseEntity<String> response = this.rest.exchange(requestBuilder.build().toUri(), chosenMethod, request, String.class);
+				testPassed = chosenStatus.equals(response.getStatusCode());
+				if(templateResponse.getBody() != null && !templateResponse.getBody().isEmpty()){
+					testPassed = testPassed && this.jsonCatalog.checkAssertion(templateResponse.getBody(), response.getBody());
+				}
+				apiReturned = response.getBody();
+			}catch(HttpClientErrorException ex){
+				testPassed = ex.getStatusCode().equals(chosenStatus);
+				apiReturned = ex.getResponseBodyAsString();
+			}catch(Exception ex){
+				testPassed = false;
+				apiReturned = ExceptionUtils.getStackTrace(ex);
+			}
+			RestMethodAssertion mappedAssertion = new RestMethodAssertion();
+			mappedAssertion.setCode(templateResponse.getCode());
+			mappedAssertion.setAssertionParameters(templateResponse.getAssertionParameters());
+			mappedAssertion.setDescription(templateResponse.getDescription());
+			mappedAssertion.setPassed(testPassed);
+			mappedAssertion.setBody(apiReturned);
+			result.add(mappedAssertion);
+		}
+		return result;
+	}
+
+	private void extractQueryParameters( UriComponentsBuilder builder, List<RestResponseAssertionParam> assertionParameters) {
+		for(RestResponseAssertionParam param : assertionParameters){
+			if(QuironParamType.QUERY.equals(param.getType())){
+				builder.queryParam(param.getName(),param.getValue());
+			}
+		}
+	}
+
+	private String expandURI(String templateUri, List<RestResponseAssertionParam> assertionParameters) {
+		String result = templateUri;
+		for(RestResponseAssertionParam param : assertionParameters){
+			if(QuironParamType.URI.equals(param.getType())){
+				result = result.replace("{"+param.getName()+"}", param.getValue());
+			}
 		}
 		return result;
 	}

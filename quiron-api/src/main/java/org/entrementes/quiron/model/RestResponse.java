@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.entrementes.quiron.model.constants.QuironHttpStatus;
+import org.entrementes.quiron.model.constants.QuironParamType;
 
 @XmlRootElement(name="response")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -60,6 +61,17 @@ public class RestResponse {
 	public void setAssertionParameters(
 			List<RestResponseAssertionParam> assertionParameters) {
 		this.assertionParameters = assertionParameters;
+	}
+
+	public String getRequestBody() {
+		String result = null;
+		for(RestResponseAssertionParam param : this.assertionParameters){
+			if(QuironParamType.BODY.equals(param.getType())){
+				result = param.getValue();
+				break;
+			}
+		}
+		return result;
 	}
 
 }

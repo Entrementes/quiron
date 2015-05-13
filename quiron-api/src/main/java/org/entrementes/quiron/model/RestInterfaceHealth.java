@@ -55,8 +55,4 @@ public class RestInterfaceHealth {
 		this.api = api;
 	}
 
-	public String buildUri() {
-		return this.host + ":" + this.port + "/" + this.context;
-	}
-
 }

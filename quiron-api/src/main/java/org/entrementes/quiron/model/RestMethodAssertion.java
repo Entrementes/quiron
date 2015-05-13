@@ -1,16 +1,21 @@
 package org.entrementes.quiron.model;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.entrementes.quiron.model.constants.QuironHttpStatus;
 
 @XmlRootElement(name="response")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RestMethodAssertion {
 	
 	@XmlElement(name="code", required=true)
-	private Integer code;
+	private QuironHttpStatus code;
 	
 	@XmlElement(name="body", required=true)
 	private String body;
@@ -18,21 +23,22 @@ public class RestMethodAssertion {
 	@XmlElement(name="description", required=false)
 	private String description;
 	
-	@XmlElement(name="assertion-payload", required=false)
-	private String assertionPayload;
-	
 	@XmlElement(name="passed", required=true)
 	private Boolean passed;
+	
+	@XmlElement(name="assertion-parameter", required=false)
+	@XmlElementWrapper(name="assertion-parameters", required=false)
+	private List<RestResponseAssertionParam> assertionParameters;
 	
 	public RestMethodAssertion() {
 	}
 
-	public Integer getCode() {
+	public QuironHttpStatus getCode() {
 		return code;
 	}
 
-	public void setCode(Integer code) {
-		this.code = code;
+	public void setCode(QuironHttpStatus quironHttpStatus) {
+		this.code = quironHttpStatus;
 	}
 
 	public String getBody() {
@@ -51,20 +57,16 @@ public class RestMethodAssertion {
 		this.description = description;
 	}
 
-	public String getAssertionPayload() {
-		return assertionPayload;
-	}
-
-	public void setAssertionPayload(String assertionPayload) {
-		this.assertionPayload = assertionPayload;
-	}
-
 	public Boolean getPassed() {
 		return passed;
 	}
 
 	public void setPassed(Boolean passed) {
 		this.passed = passed;
+	}
+
+	public void setAssertionParameters( List<RestResponseAssertionParam> assertionParameters) {
+		this.assertionParameters = assertionParameters;
 	}
 
 }

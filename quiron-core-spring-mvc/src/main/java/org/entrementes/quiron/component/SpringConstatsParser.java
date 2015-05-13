@@ -27,6 +27,11 @@ public class SpringConstatsParser implements ConstantsParser{
 	@Override
 	public Object parseStatus(QuironHttpStatus status) {
 		if(QuironHttpStatus.OK.equals(status)) return HttpStatus.OK;
+		if(QuironHttpStatus.BAD_REQUEST.equals(status)) return HttpStatus.BAD_REQUEST;
+		if(QuironHttpStatus.CREATED.equals(status)) return HttpStatus.CREATED;
+		if(QuironHttpStatus.UNAUTHORIZED.equals(status)) return HttpStatus.UNAUTHORIZED;
+		if(QuironHttpStatus.CONFLICT.equals(status)) return HttpStatus.CONFLICT;
+		if(QuironHttpStatus.NOT_FOUND.equals(status)) return HttpStatus.NOT_FOUND;
 		if(QuironHttpStatus.INTERNAL_SERVER_ERROR.equals(status)) return HttpStatus.INTERNAL_SERVER_ERROR;
 		throw new QuironException(ExceptionCode.BAD_REQUEST_BODY);
 	}

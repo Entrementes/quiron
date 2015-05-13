@@ -23,8 +23,8 @@ public class ExampleExceptionHandler {
         }
     }
     
-    @ExceptionHandler(value={Exception.class})
-    public ResponseEntity<?> defaultErrorHandler(HttpServletRequest request, Exception qe) {
-        return new ResponseEntity<String>(qe.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+//    @ExceptionHandler(value={Exception.class})
+//    public ResponseEntity<?> defaultErrorHandler(HttpServletRequest request, Exception qe) {
+//        return new ResponseEntity<String>(qe.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 }

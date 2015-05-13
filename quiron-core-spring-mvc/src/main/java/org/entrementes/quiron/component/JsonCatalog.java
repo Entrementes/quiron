@@ -52,13 +52,9 @@ public class JsonCatalog {
 	}
 	
 	public boolean checkAssertion(String assertionPayload, String responseBody) {
-		if(quironParser.isQuironEL(assertionPayload)){
-			JsonElement responseJson = parser.parse(responseBody);
-			JsonElement expectedJson = parser.parse(this.externalPayloadReferences.get(quironParser.unwrap(assertionPayload)));
-			return responseJson.toString().equals(expectedJson.toString());
-		}else{
-			return assertionPayload.equals(responseBody);
-		}
+		JsonElement responseJson = parser.parse(responseBody);
+		JsonElement expectedJson = parser.parse(assertionPayload);
+		return responseJson.toString().equals(expectedJson.toString());
 	}
 	
 	public String getJsonBody(String request){

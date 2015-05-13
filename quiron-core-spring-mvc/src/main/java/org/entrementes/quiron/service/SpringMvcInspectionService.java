@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 public class SpringMvcInspectionService implements InspectionServce {
@@ -69,7 +70,12 @@ public class SpringMvcInspectionService implements InspectionServce {
 					.api(this.api)
 					.request(request)
 				.buildRestInterfaceHealth();
-		RestAPIHealth healthCheck = this.healthTester.test(result.buildUri(), this.api);
+		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+		builder.scheme(request.getScheme());
+		builder.host(request.getServerName());
+		builder.port(result.getPort());
+		builder.path(result.getContext());
+		RestAPIHealth healthCheck = this.healthTester.test(builder, this.api);
 		result.setApi(healthCheck);
 		return result;
 	}
