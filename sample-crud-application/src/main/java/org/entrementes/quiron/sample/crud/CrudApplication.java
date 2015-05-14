@@ -60,6 +60,10 @@ public class CrudApplication extends SpringBootServletInitializer {
 	
     public static void main(String[] args) {
     	ConfigurableApplicationContext context = SpringApplication.run(CrudApplication.class, args);
-        context.getBean(BusAdapter.class).contextInitialized();
+    	try{
+    		context.getBean(BusAdapter.class).contextInitialized();
+    	}catch(Exception ex){
+    		//Can't register at monitor
+    	}
     }
 }
