@@ -1,0 +1,5 @@
+{
+	"quironTokenFormat": "\\$\\{((\\w|-)+).(\\w+)\\}",
+	"substringPrefixLength": 2,
+	"substringSuffixLength": 1
+}
