@@ -1,68 +1,86 @@
 <!DOCTYPE html>
 <html data-ng-app="quironMonitor">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Quiron Monitor</title>
-    <link rel="stylesheet" href="styles/quiron.css">
-  	<script src="scripts/angular.min.js"></script>
-  	<script src="scripts/quiron.js"></script>
-  </head>
-  <body data-ng-controller="MonitorCtrl">
-	<h1 id="title">Quiron Monitor</h1>
-	<table id="monitorContent">
-		<thead>
-			<th>id</th>
-			<th>version</th>
-			<th>resources</th>
-		</thead>
-		<tbody class="apiList">
-			<tr data-ng-repeat="interface in interfaces" class="api">
-				<td>{{interface.api.id}}</td>
-				<td>{{interface.api.version}}</td>
-				<td>
-					<ul class="resourceList">
-						<li data-ng-repeat="resource in interface.api.resources" class="resource">
-							<span>{{resource.id}}</span>
-							<ul class="methodList">
-								
-								<p data-ng-show="resource.methods.length">methods:</p>
+	<head>
+		<title>Quiron Monitor</title>
+		
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<link rel="stylesheet" href="styles/quiron.css">
+		<link rel="stylesheet" href="styles/bootstrap.min.css">
+		
+		<script src="scripts/angular.min.js"></script>
+		<script src="scripts/jquery-2.1.4.min.js"></script>
+		<script src="scripts/bootstrap.min.js"></script>
+		<script src="scripts/quiron.js"></script>
+	</head>
+<body data-ng-controller="MonitorCtrl">
+	<div class="container">
+		<div class="header clearfix">
+			<h3 class="text-muted">Quiron Monitor</h3>
+		</div>
+		<table id="monitorContent">
+			<thead>
+				<tr>
+					<th>id</th>
+					<th>version</th>
+					<th>resources</th>
+				</tr>
+			</thead>
+			<tbody class="apiList">
+				<tr data-ng-repeat="interface in interfaces" class="api">
+					<td>{{interface.api.id}}</td>
+					<td>{{interface.api.version}}</td>
+					<td>
+						<ul class="resourceList">
+							<li data-ng-repeat="resource in interface.api.resources"
+								class="resource"><span>{{resource.id}}</span>
+								<ul class="methodList">
 
-								<li data-ng-repeat="method in resource.methods" class="method">
-									
-									<span>{{method.id}}:</span>
-									<span>{{method.description}}</span>
-									<span>{{method.path}}</span>
-									<span>{{method.methodType}}</span>
-									
-									<p data-ng-show="method.parameters.length">parameters:</p>
+									<p data-ng-show="resource.methods.length">methods:</p>
 
-									<ul data-ng-repeat="parameter in method.parameters" class="parmeterList">
-										
-										<span>{{parameter.name}}</span>
-										<span>{{parameter.type}}</span>
-										<span>{{parameter.style}}</span>
-										<span>{{parameter.required}}</span>
-									
-									</ul>
-									
-									<p data-ng-show="method.dependencies.length">dependencies:</p>
+									<li data-ng-repeat="method in resource.methods" class="method">
 
-									<ul data-ng-repeat="dependency in method.dependencies" class="dependencyList">
-										
-										<span>{{dependency.id}}</span>
-										<span>{{dependency.host}}</span>
-									
-									</ul>
+										<span>{{method.id}}:</span> <span>{{method.description}}</span>
+										<span>{{method.path}}</span> <span>{{method.methodType}}</span>
 
-									<ul data-ng-repeat="response in method.responses" class="responseList">
-									</ul>
-								</li>
-							</ul>
-						</li>
-					</ul>
-				</td>
-			</tr>
-		</tbody>
-	</table>
-  </body>
+										<p data-ng-show="method.parameters.length">parameters:</p>
+
+										<ul data-ng-repeat="parameter in method.parameters"
+											class="parmeterList">
+
+											<span>{{parameter.name}}</span>
+											<span>{{parameter.type}}</span>
+											<span>{{parameter.style}}</span>
+											<span>{{parameter.required}}</span>
+
+										</ul>
+
+										<p data-ng-show="method.dependencies.length">dependencies:</p>
+
+										<ul data-ng-repeat="dependency in method.dependencies"
+											class="dependencyList">
+
+											<span>{{dependency.id}}</span>
+											<span>{{dependency.host}}</span>
+
+										</ul>
+
+										<ul data-ng-repeat="response in method.responses"
+											class="responseList">
+										</ul>
+									</li>
+								</ul></li>
+						</ul>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<footer class="footer">
+            <p>&copy; Entrementes</p>
+        </footer>
+	</div>
+	
+</body>
 </html>
