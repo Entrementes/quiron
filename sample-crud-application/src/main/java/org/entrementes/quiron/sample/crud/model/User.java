@@ -1,4 +1,4 @@
-package org.entrementes.quiron.sample.boot.model;
+package org.entrementes.quiron.sample.crud.model;
 
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAccessType;

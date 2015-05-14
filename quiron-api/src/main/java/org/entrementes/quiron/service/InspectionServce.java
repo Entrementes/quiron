@@ -25,5 +25,7 @@ public interface InspectionServce {
 	RestMethodDependency getMethodDependency(String resourceId, String methodId, String dependencyId);
 
 	Map<String, RestMethodDependency> listApiDependencies();
+
+	void registerMonitor(HttpServletRequest request);
 	
 }

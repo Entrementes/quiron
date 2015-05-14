@@ -1,4 +1,4 @@
-package org.entrementes.quiron.sample.boot;
+package org.entrementes.quiron.sample.crud;
 
 import javax.servlet.http.HttpServletRequest;
 

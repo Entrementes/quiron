@@ -1,4 +1,4 @@
-package org.entrementes.quiron.sample.boot;
+package org.entrementes.quiron.sample.crud;
 
 import static org.entrementes.quiron.model.constants.QuironHttpStatus.*;
 
@@ -14,7 +14,7 @@ import org.entrementes.quiron.annotation.ApiResource;
 import org.entrementes.quiron.annotation.ApiResponse;
 import org.entrementes.quiron.model.constants.QuironHttpStatus;
 import org.entrementes.quiron.model.constants.QuironParamType;
-import org.entrementes.quiron.sample.boot.model.User;
+import org.entrementes.quiron.sample.crud.model.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;

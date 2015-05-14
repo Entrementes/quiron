@@ -1,4 +1,4 @@
-package org.entrementes.quiron.sample.boot;
+package org.entrementes.quiron.sample.crud;
 
 import java.util.EnumSet;
 
@@ -13,6 +13,8 @@ import org.entrementes.quiron.filter.QuironControlMessageFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
+import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +25,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 @ImportResource("classpath:spring-context.xml")
 @ComponentScan
 @EnableAutoConfiguration
-public class Application {
+public class CrudApplication extends SpringBootServletInitializer {
 
 	private QuironConfiguration configuration = new QuironConfigurationBuilder().buildDefault();
 	
@@ -57,6 +59,7 @@ public class Application {
 	}
 	
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+    	ConfigurableApplicationContext context = SpringApplication.run(CrudApplication.class, args);
+        context.getBean(BusAdapter.class).contextInitialized();
     }
 }

@@ -1,9 +1,10 @@
-package org.entrementes.quiron.sample.boot;
+package org.entrementes.quiron.sample.crud;
 
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.entrementes.quiron.annotation.ApiDependency;
 import org.entrementes.quiron.annotation.ApiMethod;
 import org.entrementes.quiron.annotation.ApiResource;
 import org.entrementes.quiron.model.RestInterface;
@@ -68,6 +69,15 @@ public class ApiResources {
 	@ResponseBody
 	public RestMethodDependency dependency(@PathVariable("resource-id") String resourceId, @PathVariable("method-id") String methodId, @PathVariable("dependency-id") String dependencyId) {
 		return this.service.getMethodDependency(resourceId, methodId, dependencyId);
+	}
+	
+	@ApiMethod(id="register-monitor", description="look for a specific dependency on the api's structure.",dependencies={
+			@ApiDependency(id="monitor")
+	})
+	@RequestMapping(value="/monitor",method=RequestMethod.GET, produces="application/json")
+	@ResponseBody
+	public void registerMonitor(HttpServletRequest request) {
+		this.service.registerMonitor(request);
 	}
 
 }

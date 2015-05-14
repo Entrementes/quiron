@@ -12,6 +12,8 @@ public class SpringWebApplicationBuilder {
 
 	private HttpServletRequest request;
 
+	private String monitoringUri;
+
 	public SpringWebApplicationBuilder api(RestAPI api) {
 		this.api = api;
 		return this;
@@ -26,6 +28,7 @@ public class SpringWebApplicationBuilder {
 		RestInterface result = new RestInterface();
 		result.setContext(this.request.getContextPath());
 		result.setPort(request.getServerPort());
+		result.setHealthMonitoringUri(monitoringUri);
 		StringBuilder builder = new StringBuilder();
 		builder.append(request.getScheme()).append("://")
 				.append(request.getServerName());
@@ -37,6 +40,7 @@ public class SpringWebApplicationBuilder {
 	public RestInterfaceHealth buildRestInterfaceHealth() {
 		RestInterfaceHealth result = new RestInterfaceHealth();
 		result.setContext(this.request.getContextPath());
+		result.setHealthMonitoringUri(monitoringUri);
 		result.setPort(request.getServerPort());
 		StringBuilder builder = new StringBuilder();
 		builder.append(request.getScheme()).append("://")
@@ -44,6 +48,11 @@ public class SpringWebApplicationBuilder {
 		result.setHost(builder.toString());
 		return result;
 		
+	}
+
+	public SpringWebApplicationBuilder setMonitoringApi(String monitoringUri) {
+		this.monitoringUri = monitoringUri;
+		return this;
 	}
 
 }
