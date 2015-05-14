@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>quiron-spring-boot-sample</artifactId>
+	<artifactId>sample-bus-application</artifactId>
 	<packaging>jar</packaging>
 
 	<parent>
@@ -10,6 +10,7 @@
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.2.3.RELEASE</version>
 	</parent>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -17,12 +18,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.entrementes</groupId>
-			<artifactId>quiron-spring-mvc</artifactId>
+			<artifactId>quiron-api</artifactId>
 			<version>1.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
 		</dependency>
 	</dependencies>
 	<build>

@@ -25,7 +25,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
@@ -42,18 +47,25 @@ public class SpringMvcInspectionService implements InspectionServce {
 
 	private RestAPI api;
 
+	private String monitoringUri;
+
+	private RestTemplate rest;
+
 	@Autowired
 	public SpringMvcInspectionService(ApplicationContext springContext,
 								SpringAnnotationParser annotationParser,
 								SpringDrivenHealthTester healthTester,
 								JsonCatalog jsonCatalog,
+								@Value("${api.monitoring.uri}") String monitoringUri,
 								@Value("${api.version}") String version,
 								@Value("${api.id}") String id) {
 		this.annotationParser = annotationParser;
 		LOGGER.debug("building API with annotation parsing strattegy.");
+		this.monitoringUri = monitoringUri;
 		this.api = this.annotationParser.buildApi(springContext, id, version);
 		this.healthTester = healthTester;
 		this.jsonCatalog = jsonCatalog;
+		this.rest = new RestTemplate();
 	}
 
 	@Override
@@ -61,6 +73,7 @@ public class SpringMvcInspectionService implements InspectionServce {
 		return new SpringWebApplicationBuilder()
 							.api(this.api)
 							.request(request)
+							.setMonitoringApi(this.monitoringUri)
 						.buildRestInterface();
 	}
 
@@ -134,6 +147,23 @@ public class SpringMvcInspectionService implements InspectionServce {
 	public Map<String,RestMethodDependency> listApiDependencies() {
 		return this.jsonCatalog.listApiDependencies();
 	
+	}
+
+	@Override
+	public void registerMonitor(HttpServletRequest request) {
+		RestInterface api = getApi(request);
+		RestMethodDependency monitorDependency = this.jsonCatalog.listApiDependencies().get("monitor-bus");
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<RestInterface> httpRequest = new HttpEntity<RestInterface>(api,headers);
+		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+		builder.scheme(request.getScheme());
+		builder.host(monitorDependency.getHost());
+		builder.port(monitorDependency.getPort());
+		builder.path(monitorDependency.getContext());
+		builder.path(monitorDependency.getPath());
+		this.rest.exchange(builder.build().toUri(), HttpMethod.POST, httpRequest, String.class);
+		
 	}
 
 }

@@ -20,6 +20,9 @@ public class RestInterface {
 	
 	@XmlElement(name="api", required=true)
 	private RestAPI api;
+	
+	@XmlElement(name="health-monitoring-uri", required=true)
+	private String healthMonitoringUri;
 
 	public RestInterface() {}
 	
@@ -53,6 +56,14 @@ public class RestInterface {
 
 	public void setApi(RestAPI api) {
 		this.api = api;
+	}
+
+	public String getHealthMonitoringUri() {
+		return healthMonitoringUri;
+	}
+	
+	public void setHealthMonitoringUri(String healthMonitoringUri) {
+		this.healthMonitoringUri = healthMonitoringUri;
 	}
 
 }
