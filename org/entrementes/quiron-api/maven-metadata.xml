@@ -3,9 +3,10 @@
   <groupId>org.entrementes</groupId>
   <artifactId>quiron-api</artifactId>
   <versioning>
+    <release>1.0.0</release>
     <versions>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>1.0.0</version>
     </versions>
-    <lastUpdated>20150514144542</lastUpdated>
+    <lastUpdated>20150514153813</lastUpdated>
   </versioning>
 </metadata>
