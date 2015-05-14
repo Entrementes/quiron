@@ -1,8 +1,5 @@
 package org.entrementes.quiron.sample.crud;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
