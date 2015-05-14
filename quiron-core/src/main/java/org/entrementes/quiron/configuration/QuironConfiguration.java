@@ -13,42 +13,24 @@ public class QuironConfiguration {
 
 	private String catalogLocation;
 	
-	private String filteredResponseFormat;
-	
-	private String httpControlRequestHeader;
-	
-	private String httpExpectedStatusHeader;
-	
 	private String expressionLanguageDefinitionFile;
 	
 	private String dependenciesCatalogFile;
 	
+	private String httpConfigurationFile;
+	
 	private QuironExpressionLanguage expressionLanguage;
+	
+	private QuironHttpConfiguration httpConfiguration;
 	
 	private JsonCatalog jsonCatalog;
 
-	public String getFilteredResponseFormat() {
-		return filteredResponseFormat;
+	public QuironHttpConfiguration getHttpConfiguration() {
+		return httpConfiguration;
 	}
 
-	public void setFilteredResponseFormat(String filteredResponseFormat) {
-		this.filteredResponseFormat = filteredResponseFormat;
-	}
-
-	public String getHttpControlRequestHeader() {
-		return httpControlRequestHeader;
-	}
-
-	public void setHttpControlRequestHeader(String httpControlRequestHeader) {
-		this.httpControlRequestHeader = httpControlRequestHeader;
-	}
-
-	public String getHttpExpectedStatusHeader() {
-		return httpExpectedStatusHeader;
-	}
-
-	public void setHttpExpectedStatusHeader(String httpExpectedStatusHeader) {
-		this.httpExpectedStatusHeader = httpExpectedStatusHeader;
+	public void setHttpConfiguration(QuironHttpConfiguration httpConfiguration) {
+		this.httpConfiguration = httpConfiguration;
 	}
 
 	public String getExpressionLanguageDefinitionFile() {
@@ -92,6 +74,12 @@ public class QuironConfiguration {
 		this.jsonCatalog = catalog;
 	}
 
-	
-	
+	public String getHttpConfigurationFile() {
+		return httpConfigurationFile;
+	}
+
+	public void setHttpConfigurationFile(String httpConfigurationFile) {
+		this.httpConfigurationFile = httpConfigurationFile;
+	}
+
 }

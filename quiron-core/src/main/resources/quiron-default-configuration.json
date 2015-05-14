@@ -1,8 +1,6 @@
 {
-	"filteredResponseFormat": "{\"quiron-request\":\"UUID\"}",
-	"httpControlRequestHeader": "quiron-control-request",
-	"httpExpectedStatusHeader": "quiron-expected-status",
 	"expressionLanguageDefinitionFile": "quiron-el-definition.json",
 	"dependenciesCatalogFile": "quiron-dependencies.json",
+	"httpConfigurationFile": "quiron-http.json",
 	"catalogLocation": "jsonCatalog/"
 }

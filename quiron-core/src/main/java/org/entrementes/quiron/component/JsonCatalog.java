@@ -19,7 +19,12 @@ public class JsonCatalog {
 		this.parser = parser;
 	}
 	
-	public boolean checkAssertion(String assertionPayload, String responseBody) {
+	public boolean checkAssertion(String assertionPayload, String responseBody, String requestControlMessage) {
+		//No response body check supplied
+		if( assertionPayload == null ) return true;
+		//Control filter override
+		if( responseBody != null && responseBody.equals(requestControlMessage) ) return true;
+		//Response check needed
 		return parser.checkEquality(assertionPayload,responseBody);
 	}
 	

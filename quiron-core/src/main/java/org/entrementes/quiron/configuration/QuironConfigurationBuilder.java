@@ -1,6 +1,7 @@
 package org.entrementes.quiron.configuration;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -28,18 +29,32 @@ public class QuironConfigurationBuilder {
 			ClassLoader classLoader = getClass().getClassLoader();
 			File configurationFile = new File(classLoader.getResource("quiron-default-configuration.json").getFile());
 			QuironConfiguration result = this.jsonService.fromJson(new FileReader(configurationFile), QuironConfiguration.class);
-			if(result.getExpressionLanguageDefinitionFile() != null){
-				File elDefinitionFile = new File(classLoader.getResource(result.getExpressionLanguageDefinitionFile()).getFile());
-				QuironExpressionLanguage el = this.jsonService.fromJson(new FileReader(elDefinitionFile),QuironExpressionLanguage.class);
-				el.setParser(new JsonParser());
-				result.setExpressionLanguage(el);
-			}
-			
+			result.setExpressionLanguage(buildExpressionLanguage(classLoader, result));
+			result.setHttpConfiguration(buildHttpConfiguration(classLoader, result));
 			result.setJsonCatalog(buildJsonCatalog(classLoader, result));
 			return result;
 		}catch( Exception ex){
 			throw new RuntimeException(ex);
 		}
+	}
+
+	private QuironExpressionLanguage buildExpressionLanguage(ClassLoader classLoader, QuironConfiguration result) throws FileNotFoundException {
+		QuironExpressionLanguage el = null;
+		if(result.getExpressionLanguageDefinitionFile() != null){
+			File elDefinitionFile = new File(classLoader.getResource(result.getExpressionLanguageDefinitionFile()).getFile());
+			el = this.jsonService.fromJson(new FileReader(elDefinitionFile),QuironExpressionLanguage.class);
+			el.setParser(new JsonParser());
+		}
+		return el;
+	}
+	
+	private QuironHttpConfiguration buildHttpConfiguration(ClassLoader classLoader, QuironConfiguration result) throws FileNotFoundException {
+		QuironHttpConfiguration http = null;
+		if(result.getHttpConfigurationFile() != null){
+			File elDefinitionFile = new File(classLoader.getResource(result.getHttpConfigurationFile()).getFile());
+			http = this.jsonService.fromJson(new FileReader(elDefinitionFile),QuironHttpConfiguration.class);
+		}
+		return http;
 	}
 
 	private JsonCatalog buildJsonCatalog(ClassLoader classLoader, QuironConfiguration result) throws IOException {

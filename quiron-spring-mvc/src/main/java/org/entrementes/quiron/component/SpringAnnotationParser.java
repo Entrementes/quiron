@@ -141,7 +141,6 @@ public class SpringAnnotationParser {
 				RestResponseAssertionParam testParameter = new RestResponseAssertionParam();
 				testParameter.setName(param.name());
 				testParameter.setType(param.type());
-				System.out.println(param.value() +" "+ this.parser.isQuironEL(param.value()));
 				if(this.parser.isQuironEL(param.value())){
 					String key = this.parser.unwrap(param.value());
 					testParameter.setValue(this.jsonCatalog.getJsonBody(key));

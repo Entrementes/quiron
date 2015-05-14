@@ -9,7 +9,7 @@
 	</modules>
 
 	<artifactId>quiron</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<groupId>org.entrementes</groupId>
 	<packaging>pom</packaging>
 

@@ -3,9 +3,10 @@ package org.entrementes.quiron.component;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.entrementes.quiron.configuration.QuironConfiguration;
+import org.entrementes.quiron.configuration.QuironHttpConfiguration;
 import org.entrementes.quiron.model.RestAPI;
 import org.entrementes.quiron.model.RestAPIHealth;
 import org.entrementes.quiron.model.RestMethod;
@@ -36,13 +37,16 @@ public class SpringDrivenHealthTester {
 	
 	private HttpProtocolParser parser;
 	
-	private QuironConfiguration configuration;
+	private QuironHttpConfiguration configuration;
+
+	private JsonCatalog catalog;
 
 	@Autowired
-	public SpringDrivenHealthTester(HttpProtocolParser parser, QuironConfiguration configuration) {
+	public SpringDrivenHealthTester(HttpProtocolParser parser, QuironHttpConfiguration configuration, JsonCatalog catalog) {
 		this.rest = new RestTemplate();
 		this.parser = parser;
 		this.configuration = configuration;
+		this.catalog = catalog;
 	}
 	
 	public RestAPIHealth test(UriComponentsBuilder builder, RestAPI api, boolean failuresOnly) {
@@ -95,6 +99,8 @@ public class SpringDrivenHealthTester {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.set(this.configuration.getHttpControlRequestHeader(), "true");
 		for(RestResponse templateResponse : method.getResponses()){
+			String requestUuid = UUID.randomUUID().toString();
+			headers.set(this.configuration.getHttpControlRequestHeader(), requestUuid);
 			UriComponentsBuilder requestBuilder = UriComponentsBuilder.fromUri(builder.build().toUri());
 			headers.set(this.configuration.getHttpExpectedStatusHeader(), templateResponse.getCode().value().toString());
 			String requestBody = templateResponse.getRequestBody();
@@ -111,7 +117,7 @@ public class SpringDrivenHealthTester {
 				recievedStatus = response.getStatusCode();
 				testPassed = chosenStatus.equals(recievedStatus);
 				if(templateResponse.getBody() != null && !templateResponse.getBody().isEmpty()){
-					testPassed = testPassed && this.configuration.getJsonCatalog().checkAssertion(templateResponse.getBody(), response.getBody());
+					testPassed = testPassed && this.catalog.checkAssertion(templateResponse.getBody(), response.getBody(), this.configuration.buildControlResponse(requestUuid));
 				}
 				apiReturned = response.getBody();
 			}catch(HttpClientErrorException ex){

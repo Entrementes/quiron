@@ -1,0 +1,5 @@
+{
+	"filteredResponseFormat": "{\"quiron-request\":\"UUID\"}",
+	"httpControlRequestHeader": "quiron-control-request",
+	"httpExpectedStatusHeader": "quiron-expected-status"
+}
