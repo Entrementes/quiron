@@ -1,7 +1,7 @@
 package org.entrementes.quiron.sample.bus;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import org.entrementes.quiron.model.RestInterface;
 import org.entrementes.quiron.model.RestInterfaceHealth;
@@ -33,15 +33,15 @@ public class MonitoringResource {
 	
 	@RequestMapping(value="/monitor",method=RequestMethod.GET, produces="application/json")
 	@ResponseBody
-	public ResponseEntity<List<RestInterfaceHealth>> monitorSubscribers(){
-		List<RestInterfaceHealth> result = this.registry.monitorSubscribers();
-		return new ResponseEntity<List<RestInterfaceHealth>>(result,HttpStatus.OK);
+	public ResponseEntity<Collection<RestInterfaceHealth>> monitorSubscribers(){
+		Collection<RestInterfaceHealth> result = this.registry.monitorSubscribers();
+		return new ResponseEntity<Collection<RestInterfaceHealth>>(result,HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/interfaces",method=RequestMethod.GET, produces="application/json")
 	@ResponseBody
-	public ResponseEntity<Map<String,RestInterface>> listSubscribers(){
-		return new ResponseEntity<Map<String,RestInterface>>(this.registry.getSubscribers(),HttpStatus.OK);
+	public ResponseEntity<Collection<RestInterface>> listSubscribers(){
+		return new ResponseEntity<Collection<RestInterface>>(this.registry.getSubscribers().values(),HttpStatus.OK);
 	}
 
 }
